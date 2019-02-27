@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Kategori">
+        <menu>
+            <item
+                android:id="@+id/bread"
+                android:icon="@drawable/bread"
+                android:title="Roti" />
+            <item
+                android:id="@+id/tart"
+                android:icon="@drawable/cake"
+                android:title="Tar" />
+            <item
+                android:id="@+id/sponge"
+                android:icon="@drawable/sponge"
+                android:title="Bolu" />
+        </menu>
+    </item>
+
+</menu>
