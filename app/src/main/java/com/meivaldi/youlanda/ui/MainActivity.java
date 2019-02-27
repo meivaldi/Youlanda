@@ -1,7 +1,9 @@
-package com.meivaldi.youlanda;
+package com.meivaldi.youlanda.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.meivaldi.youlanda.R;
 
 public class MainActivity extends AppCompatActivity {
 
