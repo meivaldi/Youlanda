@@ -92,7 +92,7 @@ public class ProductNetworkDataSource {
         executors.networkIO().execute(() -> {
             try {
                 GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-                Call<List<Product>> call = service.getAllProducts();
+                Call<List<Product>> call = service.getAllProducts("roti");
                 call.enqueue(new Callback<List<Product>>() {
                     @Override
                     public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
@@ -101,7 +101,7 @@ public class ProductNetworkDataSource {
 
                     @Override
                     public void onFailure(Call<List<Product>> call, Throwable t) {
-
+                        Toast.makeText(context, "Gagal", Toast.LENGTH_SHORT).show();
                     }
                 });
             } catch (Exception e) {
