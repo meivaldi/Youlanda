@@ -46,8 +46,10 @@ public class ProductRepository {
             AppExecutors appExecutors) {
         Log.d(TAG, "Getting repository");
         if (instance == null) {
-            instance = new ProductRepository(productDAO, productNetworkDataSource, appExecutors);
-            Log.d(TAG, "New repository created");
+            synchronized (LOCK) {
+                instance = new ProductRepository(productDAO, productNetworkDataSource, appExecutors);
+                Log.d(TAG, "New repository created");
+            }
         }
 
         return instance;
@@ -75,11 +77,11 @@ public class ProductRepository {
     }
 
     private void deleteOldData() {
-
+        productDAO.deleteAllProducts();
     }
 
-    public LiveData<List<Product>> getProducts(String jenis) {
+    public LiveData<List<Product>> getProducts() {
         initializeData();
-        return productDAO.getAllProducts(jenis);
+        return productDAO.getAllProducts();
     }
 }

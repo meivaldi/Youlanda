@@ -18,29 +18,21 @@ public class Product {
     @SerializedName("foto_produk")
     private String foto;
 
-    private String jenis;
-
     @SerializedName("harga_produk")
     private String harga;
 
-    private int stok;
-
-    public Product(int id, String nama, String foto, String jenis, String harga, int stok) {
+    public Product(int id, String nama, String foto, String harga) {
         this.id = id;
         this.nama = nama;
         this.foto = foto;
-        this.jenis = jenis;
         this.harga = harga;
-        this.stok = stok;
     }
 
     @Ignore
-    public Product(String nama, String foto, String jenis, String harga, int stok) {
+    public Product(String nama, String foto, String harga) {
         this.nama = nama;
         this.foto = foto;
-        this.jenis = jenis;
         this.harga = harga;
-        this.stok = stok;
     }
 
     public int getId() {
@@ -55,13 +47,8 @@ public class Product {
         return foto;
     }
 
-    public String getJenis() { return jenis; }
-
     public String getHarga() {
         return harga;
     }
 
-    public int getStok() {
-        return stok;
-    }
 }

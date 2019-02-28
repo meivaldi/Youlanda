@@ -10,12 +10,12 @@ import java.util.List;
 
 public class MainActivityViewModel extends ViewModel {
 
-    private final ProductRepository repository;
+    private final ProductRepository mRepository;
     private final LiveData<List<Product>> productList;
 
     public MainActivityViewModel(ProductRepository repository) {
-        this.repository = repository;
-        productList = repository.getProducts("roti");
+        mRepository = repository;
+        productList = mRepository.getProducts();
     }
 
     public LiveData<List<Product>> getProductList() {
