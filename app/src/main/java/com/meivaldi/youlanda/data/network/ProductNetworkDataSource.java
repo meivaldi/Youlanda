@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.Driver;
@@ -16,7 +17,12 @@ import com.firebase.jobdispatcher.Trigger;
 import com.meivaldi.youlanda.AppExecutors;
 import com.meivaldi.youlanda.data.database.Product;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProductNetworkDataSource {
 
@@ -30,7 +36,7 @@ public class ProductNetworkDataSource {
     private static ProductNetworkDataSource instance;
     private final Context context;
 
-    private final MutableLiveData<Product[]> mDownloadedProducts;
+    private final MutableLiveData<List<Product>> mDownloadedProducts;
     private final AppExecutors executors;
 
     public ProductNetworkDataSource(Context context, AppExecutors executors) {
@@ -57,7 +63,7 @@ public class ProductNetworkDataSource {
         Log.d(LOG_TAG, "Service created");
     }
 
-    public LiveData<Product[]> getCurrentProducts() {
+    public LiveData<List<Product>> getCurrentProducts() {
         return mDownloadedProducts;
     }
 
@@ -85,7 +91,19 @@ public class ProductNetworkDataSource {
         Log.d(LOG_TAG, "Fetch product started");
         executors.networkIO().execute(() -> {
             try {
+                GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+                Call<List<Product>> call = service.getAllProducts();
+                call.enqueue(new Callback<List<Product>>() {
+                    @Override
+                    public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                        Toast.makeText(context, response.body().toString(), Toast.LENGTH_SHORT).show();
+                    }
 
+                    @Override
+                    public void onFailure(Call<List<Product>> call, Throwable t) {
+
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }

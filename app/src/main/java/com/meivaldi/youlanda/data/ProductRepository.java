@@ -29,7 +29,7 @@ public class ProductRepository {
         this.productNetworkDataSource = productNetworkDataSource;
         this.appExecutors = appExecutors;
 
-        LiveData<Product[]> networkData = productNetworkDataSource.getCurrentProducts();
+        LiveData<List<Product>> networkData = productNetworkDataSource.getCurrentProducts();
         networkData.observeForever(newProductFromNetwork -> {
             appExecutors.diskIO().execute(() -> {
                 deleteOldData();

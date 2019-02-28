@@ -13,7 +13,7 @@ import java.util.List;
 public interface ProductDAO {
 
     @Insert
-    void insertAllProducts(Product... products);
+    void insertAllProducts(List<Product> productList);
 
     @Insert
     void insertProduct(Product product);
