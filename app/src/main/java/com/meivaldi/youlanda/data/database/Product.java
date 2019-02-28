@@ -10,25 +10,22 @@ import com.google.gson.annotations.SerializedName;
 public class Product {
 
     @PrimaryKey(autoGenerate = true)
-    @SerializedName("id")
     private int id;
 
-    @SerializedName("nama")
+    @SerializedName("nama_produk")
     private String nama;
 
-    @SerializedName("foto")
+    @SerializedName("foto_produk")
     private String foto;
 
-    @SerializedName("jenis")
     private String jenis;
 
-    @SerializedName("harga")
-    private double harga;
+    @SerializedName("harga_produk")
+    private String harga;
 
-    @SerializedName("stok")
     private int stok;
 
-    public Product(int id, String nama, String foto, String jenis, double harga, int stok) {
+    public Product(int id, String nama, String foto, String jenis, String harga, int stok) {
         this.id = id;
         this.nama = nama;
         this.foto = foto;
@@ -38,7 +35,7 @@ public class Product {
     }
 
     @Ignore
-    public Product(String nama, String foto, String jenis, double harga, int stok) {
+    public Product(String nama, String foto, String jenis, String harga, int stok) {
         this.nama = nama;
         this.foto = foto;
         this.jenis = jenis;
@@ -60,7 +57,7 @@ public class Product {
 
     public String getJenis() { return jenis; }
 
-    public double getHarga() {
+    public String getHarga() {
         return harga;
     }
 

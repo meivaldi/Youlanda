@@ -92,11 +92,11 @@ public class ProductNetworkDataSource {
         executors.networkIO().execute(() -> {
             try {
                 GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-                Call<List<Product>> call = service.getAllProducts("roti");
+                Call<List<Product>> call = service.getAllBreads();
                 call.enqueue(new Callback<List<Product>>() {
                     @Override
                     public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                        Toast.makeText(context, response.body().toString(), Toast.LENGTH_SHORT).show();
+                        mDownloadedProducts.postValue(response.body());
                     }
 
                     @Override
