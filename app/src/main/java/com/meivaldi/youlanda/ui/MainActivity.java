@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
 
         viewModel.getProductList().observe(this, products -> {
-
+            Toast.makeText(this, "" + products.size(), Toast.LENGTH_SHORT).show();
         });
     }
 }
