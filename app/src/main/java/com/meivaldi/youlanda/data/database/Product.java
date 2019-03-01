@@ -21,18 +21,32 @@ public class Product {
     @SerializedName("harga_produk")
     private String harga;
 
-    public Product(int id, String nama, String foto, String harga) {
+    @SerializedName("jenis")
+    private String jenis;
+
+    @SerializedName("stok")
+    private String stok;
+
+    private boolean selected;
+
+    public Product(int id, String nama, String foto, String harga, String jenis, String stok) {
         this.id = id;
         this.nama = nama;
         this.foto = foto;
         this.harga = harga;
+        this.jenis = jenis;
+        this.stok = stok;
+        this.selected = false;
     }
 
     @Ignore
-    public Product(String nama, String foto, String harga) {
+    public Product(String nama, String foto, String harga, String jenis, String stok) {
         this.nama = nama;
         this.foto = foto;
         this.harga = harga;
+        this.jenis = jenis;
+        this.stok = stok;
+        this.selected = false;
     }
 
     public int getId() {
@@ -51,4 +65,19 @@ public class Product {
         return harga;
     }
 
+    public String getJenis() {
+        return jenis;
+    }
+
+    public String getStok() {
+        return stok;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 }

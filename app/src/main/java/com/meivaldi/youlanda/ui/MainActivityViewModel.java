@@ -13,9 +13,9 @@ public class MainActivityViewModel extends ViewModel {
     private final ProductRepository mRepository;
     private final LiveData<List<Product>> productList;
 
-    public MainActivityViewModel(ProductRepository repository) {
+    public MainActivityViewModel(ProductRepository repository, String jenis) {
         mRepository = repository;
-        productList = mRepository.getProducts();
+        productList = mRepository.getProducts(jenis);
     }
 
     public LiveData<List<Product>> getProductList() {

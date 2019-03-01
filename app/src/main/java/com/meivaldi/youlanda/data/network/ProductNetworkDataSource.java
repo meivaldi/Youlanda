@@ -27,7 +27,7 @@ import retrofit2.Response;
 public class ProductNetworkDataSource {
 
     private static final String LOG_TAG = ProductNetworkDataSource.class.getSimpleName();
-    private static final int SYNC_INTERVAL_HOURS = 8;
+    private static final int SYNC_INTERVAL_HOURS = 1;
     private static final int SYNC_INTERVAL_SECONDS = (int) TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS);
     private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
     private static final String PRODUCT_SYNC_TAG = "product-sync";

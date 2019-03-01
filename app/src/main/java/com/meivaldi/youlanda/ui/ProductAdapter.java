@@ -1,7 +1,6 @@
 package com.meivaldi.youlanda.ui;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,6 +22,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     private List<Product> productList;
     private LayoutInflater layoutInflater;
     private Context context;
+    private ProductAdapterListener listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -38,9 +38,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     }
 
-    public ProductAdapter(Context context, List<Product> productList) {
+    public ProductAdapter(Context context, List<Product> productList, ProductAdapterListener listener) {
         this.productList = productList;
         this.context = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -63,7 +64,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         myViewHolder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                listener.onProductClicked(product);
             }
         });
 

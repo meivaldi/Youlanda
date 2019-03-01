@@ -25,8 +25,8 @@ public class InjectorUtils {
         return ProductNetworkDataSource.getInstance(context.getApplicationContext(), appExecutors);
     }
 
-    public static MainViewModelFactory provideMainActivityViewModelFactory(Context context) {
+    public static MainViewModelFactory provideMainActivityViewModelFactory(Context context, String jenis) {
         ProductRepository repository = provideRepository(context);
-        return new MainViewModelFactory(repository);
+        return new MainViewModelFactory(repository, jenis);
     }
 }

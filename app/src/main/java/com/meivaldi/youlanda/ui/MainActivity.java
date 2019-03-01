@@ -20,9 +20,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.meivaldi.youlanda.R;
+import com.meivaldi.youlanda.data.ProductRepository;
+import com.meivaldi.youlanda.data.database.Product;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+    ProductAdapter.ProductAdapterListener {
 
     private MainActivityViewModel viewModel;
     private RecyclerView recyclerView;
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getApplicationContext());
+        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getApplicationContext(), "roti");
         viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
 
         recyclerView = findViewById(R.id.product_list);
@@ -59,9 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         viewModel.getProductList().observe(this, products -> {
-            adapter = new ProductAdapter(getApplicationContext(), products);
+            adapter = new ProductAdapter(getApplicationContext(), products, this);
             recyclerView.setAdapter(adapter);
-            Toast.makeText(getApplicationContext(), "" + products.size(), Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -89,6 +91,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onProductClicked(Product product) {
+        product.setSelected(product.isSelected() ? false : true);
+        ProductRepository repository = InjectorUtils.provideRepository(getApplicationContext());
+
+        repository.updateProduct(product);
+        Toast.makeText(this, String.valueOf(product.isSelected()), Toast.LENGTH_SHORT).show();
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {

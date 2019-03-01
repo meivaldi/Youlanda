@@ -11,12 +11,7 @@ import retrofit2.http.POST;
 
 public interface GetDataService {
 
-    @GET("/android/get_product.php?jenis=roti")
+    @GET("/android/get_product.php")
     Call<List<Product>> getAllBreads();
 
-    @GET("/android/get_product.php?jenis=tar")
-    Call<List<Product>> getAllTarts();
-
-    @GET("/android/get_product.php?jenis=bolu")
-    Call<List<Product>> getAllSponges();
 }

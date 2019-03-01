@@ -1,6 +1,7 @@
 package com.meivaldi.youlanda.data;
 
 import android.arch.lifecycle.LiveData;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.meivaldi.youlanda.AppExecutors;
@@ -80,8 +81,20 @@ public class ProductRepository {
         productDAO.deleteAllProducts();
     }
 
-    public LiveData<List<Product>> getProducts() {
+    public LiveData<List<Product>> getProducts(String jenis) {
         initializeData();
-        return productDAO.getAllProducts();
+        return productDAO.getAllProducts(jenis);
+    }
+
+    public void updateProduct(Product product) {
+        new UpdateProduct().execute(product);
+    }
+
+    private class UpdateProduct extends AsyncTask<Product, Void, Void> {
+        @Override
+        protected Void doInBackground(Product... products) {
+            productDAO.updateProduct(products[0]);
+            return null;
+        }
     }
 }
