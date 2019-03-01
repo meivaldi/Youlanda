@@ -19,7 +19,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
