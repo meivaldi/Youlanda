@@ -30,4 +30,7 @@ public interface ProductDAO {
     @Query("SELECT * FROM product WHERE jenis = :jenis")
     LiveData<List<Product>> getAllProducts(String jenis);
 
+    @Query("SELECT * FROM product WHERE nama = :name")
+    Product getProduct(String name);
+
 }

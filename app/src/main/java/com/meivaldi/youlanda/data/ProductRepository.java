@@ -22,6 +22,7 @@ public class ProductRepository {
     private final AppExecutors appExecutors;
 
     private boolean initialized = false;
+    private Product temp;
 
     public ProductRepository(ProductDAO productDAO,
                              ProductNetworkDataSource productNetworkDataSource,
@@ -97,4 +98,5 @@ public class ProductRepository {
             return null;
         }
     }
+
 }

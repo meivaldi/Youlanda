@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -26,12 +27,18 @@ import com.meivaldi.youlanda.data.database.Product;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
     ProductAdapter.ProductAdapterListener {
 
     private MainActivityViewModel viewModel;
     private RecyclerView recyclerView, cart;
     private ProductAdapter adapter;
+    private CartAdapter cartAdapter;
+    private List<Product> productList;
 
     private ActivityMainBinding binding;
 
@@ -66,10 +73,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         cart = binding.content.recyclerView;
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 4);
+        LinearLayoutManager layoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         cart.setLayoutManager(layoutManager);
-        cart.addItemDecoration(new GridSpacingItemDecoration(4, dpToPx(10), true));
-        cart.setItemAnimator(new DefaultItemAnimator());
+        cart.setHasFixedSize(true);
+
+        productList = new ArrayList<>();
+        cartAdapter = new CartAdapter(productList);
+        cart.setAdapter(cartAdapter);
 
         viewModel.getProductList().observe(this, products -> {
             adapter = new ProductAdapter(products, this);
@@ -110,8 +121,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onProductClicked(Product product) {
         product.setSelected(product.isSelected() ? false : true);
         ProductRepository repository = InjectorUtils.provideRepository(getApplicationContext());
-
         repository.updateProduct(product);
+
+        if (product.isSelected()) {
+            productList.add(product);
+        } else {
+            int index = getIndex(productList, product.getNama());
+            productList.remove(index);
+        }
+
+        cartAdapter.notifyDataSetChanged();
+    }
+
+    private int getIndex(List<Product> productList, String nama) {
+        int index = -1;
+
+        for (Product pr: productList) {
+            if (pr.getNama().equals(nama)) {
+                index = productList.indexOf(pr);
+            }
+        }
+
+        return index;
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {

@@ -2,7 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+        <variable
+            name="product"
+            type="com.meivaldi.youlanda.data.database.Product" />
 
+        <import type="com.meivaldi.youlanda.utilities.DataBindingUtils" />
     </data>
 
     <RelativeLayout
@@ -22,13 +26,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:text="Product Name" />
+                android:text="@{product.nama}" />
 
             <TextView
                 android:id="@+id/harga"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Product Price"
+                android:text="@{DataBindingUtils.convert(product.harga)}"
                 android:textSize="18dp" />
 
         </LinearLayout>
@@ -70,7 +74,7 @@
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="2"
+                    android:text="1"
                     android:textSize="25dp"
                     android:textColor="@android:color/black" />
 
