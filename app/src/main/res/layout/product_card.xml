@@ -1,60 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-        android:id="@+id/card_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="@dimen/card_margin"
-        android:orientation="vertical">
+    <data>
+        <variable
+            name="product"
+            type="com.meivaldi.youlanda.data.database.Product" />
 
-        <RelativeLayout
+        <import type="com.meivaldi.youlanda.utilities.DataBindingUtils" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/card_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/card_margin"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/imageContainer"
-                android:layout_width="180dp"
-                android:layout_height="@dimen/album_cover_height"
-                android:background="@drawable/without_border"
-                android:padding="10dp">
-
-                <ImageView
-                    android:id="@+id/thumbnail"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:scaleType="fitXY" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/nama_produk"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/imageContainer"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:textColor="#484848"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/harga_produk"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/nama_produk"
-                android:layout_centerHorizontal="true"
-                android:textColor="#484848"
-                android:textSize="20dp" />
+                <LinearLayout
+                    android:id="@+id/imageContainer"
+                    android:layout_width="180dp"
+                    android:layout_height="@dimen/album_cover_height"
+                    android:background="@{product.selected ? @drawable/with_border : @drawable/without_border}"
+                    android:padding="10dp">
 
-        </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/thumbnail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:scaleType="fitXY"
+                        android:productImage="@{product.foto}"/>
 
-    </LinearLayout>
+                </LinearLayout>
 
-</RelativeLayout>
+                <TextView
+                    android:id="@+id/nama_produk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/imageContainer"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="@{product.nama}"
+                    android:textColor="#484848"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/harga_produk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/nama_produk"
+                    android:layout_centerHorizontal="true"
+                    android:text="@{DataBindingUtils.convert(product.harga)}"
+                    android:textColor="#484848"
+                    android:textSize="20dp" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

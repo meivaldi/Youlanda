@@ -2,6 +2,7 @@ package com.meivaldi.youlanda.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Resources;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.design.widget.NavigationView;
@@ -22,47 +23,56 @@ import android.widget.Toast;
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
 import com.meivaldi.youlanda.data.database.Product;
+import com.meivaldi.youlanda.databinding.ActivityMainBinding;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
     ProductAdapter.ProductAdapterListener {
 
     private MainActivityViewModel viewModel;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView, cart;
     private ProductAdapter adapter;
+
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = binding.content.toolbar;
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setTitle("");
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setSubtitleTextColor(Color.WHITE);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = binding.drawerLayout;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = binding.navView;
         navigationView.setNavigationItemSelectedListener(this);
 
         MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getApplicationContext(), "roti");
         viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
 
-        recyclerView = findViewById(R.id.product_list);
+        recyclerView = binding.content.productList;
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 4);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(4, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        cart = binding.content.recyclerView;
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 4);
+        cart.setLayoutManager(layoutManager);
+        cart.addItemDecoration(new GridSpacingItemDecoration(4, dpToPx(10), true));
+        cart.setItemAnimator(new DefaultItemAnimator());
+
         viewModel.getProductList().observe(this, products -> {
-            adapter = new ProductAdapter(getApplicationContext(), products, this);
+            adapter = new ProductAdapter(products, this);
             recyclerView.setAdapter(adapter);
         });
     }
@@ -84,11 +94,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.bread) {
+
         } else if (id == R.id.tart) {
+
         } else if (id == R.id.sponge) {
+
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = binding.drawerLayout;
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -99,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ProductRepository repository = InjectorUtils.provideRepository(getApplicationContext());
 
         repository.updateProduct(product);
-        Toast.makeText(this, String.valueOf(product.isSelected()), Toast.LENGTH_SHORT).show();
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {

@@ -1,6 +1,7 @@
 package com.meivaldi.youlanda.ui;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.database.Product;
+import com.meivaldi.youlanda.databinding.ProductCardBinding;
 
 import java.util.List;
 
@@ -21,26 +23,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     private List<Product> productList;
     private LayoutInflater layoutInflater;
-    private Context context;
     private ProductAdapterListener listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView thumbnail;
-        private TextView nama, harga;
+        private final ProductCardBinding binding;
 
-        public MyViewHolder(View view) {
-            super(view);
-            thumbnail = view.findViewById(R.id.thumbnail);
-            nama = view.findViewById(R.id.nama_produk);
-            harga = view.findViewById(R.id.harga_produk);
+        public MyViewHolder(final ProductCardBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
-
     }
 
-    public ProductAdapter(Context context, List<Product> productList, ProductAdapterListener listener) {
+    public ProductAdapter(List<Product> productList, ProductAdapterListener listener) {
         this.productList = productList;
-        this.context = context;
         this.listener = listener;
     }
 
@@ -51,27 +47,23 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             layoutInflater = LayoutInflater.from(viewGroup.getContext());
         }
 
-        View view = layoutInflater.inflate(R.layout.product_card, viewGroup, false);
+        ProductCardBinding binding = DataBindingUtil.inflate(layoutInflater, R.layout.product_card, viewGroup, false);
 
-        return new MyViewHolder(view);
+        return new MyViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         final Product product = productList.get(i);
-        myViewHolder.nama.setText(product.getNama());
-        myViewHolder.harga.setText("Rp." + product.getHarga());
-        myViewHolder.thumbnail.setOnClickListener(new View.OnClickListener() {
+
+        myViewHolder.binding.setProduct(product);
+        myViewHolder.binding.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onProductClicked(product);
             }
         });
 
-        Glide.with(context)
-                .load(product.getFoto())
-                .apply(new RequestOptions().transform(new RoundedCorners(30)))
-                .into(myViewHolder.thumbnail);
     }
 
     @Override

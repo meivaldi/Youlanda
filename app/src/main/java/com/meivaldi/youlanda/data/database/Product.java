@@ -3,7 +3,12 @@ package com.meivaldi.youlanda.data.database;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.databinding.BindingAdapter;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "product")
@@ -79,5 +84,13 @@ public class Product {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    @BindingAdapter({"android:productImage"})
+    public static void loadImage(ImageView view, String url) {
+        Glide.with(view.getContext())
+                .load(url)
+                .apply(new RequestOptions().transform(new RoundedCorners(30)))
+                .into(view);
     }
 }

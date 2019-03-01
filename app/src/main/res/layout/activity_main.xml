@@ -1,34 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <data>
+        <variable
+            name="product"
+            type="com.meivaldi.youlanda.data.database.Product" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:openDrawer="start">
+        tools:context=".ui.MainActivity">
 
-        <include
-            android:id="@+id/content"
+        <android.support.v4.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            layout="@layout/app_bar_main"/>
-
-        <android.support.design.widget.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:theme="@style/NavigationView"
-            android:paddingTop="10dp"
-            android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            app:menu="@menu/activity_main_drawer" />
+            tools:openDrawer="start">
 
-    </android.support.v4.widget.DrawerLayout>
+            <include
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                layout="@layout/app_bar_main"
+                bind:product="@{product}"/>
 
-</android.support.constraint.ConstraintLayout>
+            <android.support.design.widget.NavigationView
+                android:id="@+id/nav_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:theme="@style/NavigationView"
+                android:paddingTop="10dp"
+                android:layout_gravity="start"
+                android:fitsSystemWindows="true"
+                app:menu="@menu/activity_main_drawer" />
+
+        </android.support.v4.widget.DrawerLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
