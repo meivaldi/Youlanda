@@ -23,6 +23,7 @@ import android.view.View;
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
 import com.meivaldi.youlanda.data.database.cart.Cart;
+import com.meivaldi.youlanda.data.database.order.Order;
 import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ProductAdapter adapter;
     private CartAdapter cartAdapter;
     private List<Cart> cartList;
+    private Order order;
 
     private ActivityMainBinding binding;
 
@@ -78,8 +80,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cart.setHasFixedSize(true);
 
         cartList = new ArrayList<>();
-        cartAdapter = new CartAdapter(getApplicationContext(), cartList);
+        order = new Order(cartList);
+
+        cartAdapter = new CartAdapter(getApplicationContext(), cartList, order);
         cart.setAdapter(cartAdapter);
+
+        binding.setOrder(order);
 
         viewModel.getProductList().observe(this, products -> {
             adapter = new ProductAdapter(products, this);
@@ -128,6 +134,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             int index = getIndex(cartList, product.getNama());
             cartList.remove(index);
         }
+
+        order.setCartSum(cartList.size());
+        order.setTotal();
+        order.setTax();
+        order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
     }

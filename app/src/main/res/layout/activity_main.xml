@@ -12,6 +12,10 @@
         <variable
             name="cart"
             type="com.meivaldi.youlanda.data.database.cart.Cart" />
+
+        <variable
+            name="order"
+            type="com.meivaldi.youlanda.data.database.order.Order" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -31,7 +35,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 layout="@layout/app_bar_main"
-                bind:product="@{product}"/>
+                bind:product="@{product}"
+                bind:cart="@{cart}"
+                bind:order="@{order}"/>
 
             <android.support.design.widget.NavigationView
                 android:id="@+id/nav_view"

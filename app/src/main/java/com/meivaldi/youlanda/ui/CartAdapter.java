@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.database.cart.Cart;
+import com.meivaldi.youlanda.data.database.order.Order;
 import com.meivaldi.youlanda.databinding.CartItemBinding;
 
 import java.util.List;
@@ -20,11 +21,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
 
     private Context context;
     private List<Cart> cartList;
+    private Order order;
     private LayoutInflater layoutInflater;
 
-    public CartAdapter(Context context, List<Cart> cartList) {
+    public CartAdapter(Context context, List<Cart> cartList, Order order) {
         this.context = context;
         this.cartList = cartList;
+        this.order = order;
     }
 
     @NonNull
@@ -51,6 +54,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
             public void onClick(View v) {
                 int quantity = cart.getQuantity() + 1;
                 cart.setQuantity(quantity);
+                order.setTotal();
+                order.setTax();
+                order.setPrice();
             }
         });
 
@@ -64,6 +70,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 } else {
                     quantity -= 1;
                     cart.setQuantity(quantity);
+                    order.setTotal();
+                    order.setTax();
+                    order.setPrice();
                 }
             }
         });
