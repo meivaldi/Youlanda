@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = binding.navView;
         navigationView.setNavigationItemSelectedListener(this);
 
-        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getApplicationContext(), "roti");
+        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getApplicationContext(), "bolu");
         viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
 
         recyclerView = binding.content.productList;
