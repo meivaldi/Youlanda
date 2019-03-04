@@ -7,7 +7,7 @@
     <data>
         <variable
             name="product"
-            type="com.meivaldi.youlanda.data.database.Product" />
+            type="com.meivaldi.youlanda.data.database.product.Product" />
     </data>
 
     <android.support.constraint.ConstraintLayout

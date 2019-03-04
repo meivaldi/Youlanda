@@ -1,4 +1,4 @@
-package com.meivaldi.youlanda.data.database;
+package com.meivaldi.youlanda.data.database.product;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;

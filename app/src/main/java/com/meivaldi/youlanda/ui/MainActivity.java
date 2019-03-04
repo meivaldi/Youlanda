@@ -22,12 +22,11 @@ import android.view.View;
 
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
-import com.meivaldi.youlanda.data.database.Product;
+import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,

@@ -1,4 +1,4 @@
-package com.meivaldi.youlanda.data.database;
+package com.meivaldi.youlanda.data.database.product;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
