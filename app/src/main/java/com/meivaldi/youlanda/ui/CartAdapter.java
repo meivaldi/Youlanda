@@ -7,18 +7,18 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.meivaldi.youlanda.R;
-import com.meivaldi.youlanda.data.database.product.Product;
+import com.meivaldi.youlanda.data.database.cart.Cart;
 import com.meivaldi.youlanda.databinding.CartItemBinding;
 
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> {
 
-    private List<Product> productList;
+    private List<Cart> cartList;
     private LayoutInflater layoutInflater;
 
-    public CartAdapter(List<Product> productList) {
-        this.productList = productList;
+    public CartAdapter(List<Cart> cartList) {
+        this.cartList = cartList;
     }
 
     @NonNull
@@ -35,14 +35,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        final Product product = productList.get(i);
+        final Cart cart = cartList.get(i);
 
-        myViewHolder.binding.setProduct(product);
+        myViewHolder.binding.setCart(cart);
     }
 
     @Override
     public int getItemCount() {
-        return productList.size();
+        return cartList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

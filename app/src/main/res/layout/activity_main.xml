@@ -8,6 +8,10 @@
         <variable
             name="product"
             type="com.meivaldi.youlanda.data.database.product.Product" />
+
+        <variable
+            name="cart"
+            type="com.meivaldi.youlanda.data.database.cart.Cart" />
     </data>
 
     <android.support.constraint.ConstraintLayout

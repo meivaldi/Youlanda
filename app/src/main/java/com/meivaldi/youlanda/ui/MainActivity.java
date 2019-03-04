@@ -22,6 +22,7 @@ import android.view.View;
 
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
+import com.meivaldi.youlanda.data.database.cart.Cart;
 import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView recyclerView, cart;
     private ProductAdapter adapter;
     private CartAdapter cartAdapter;
-    private List<Product> productList;
+    private List<Cart> cartList;
 
     private ActivityMainBinding binding;
 
@@ -76,8 +77,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cart.setLayoutManager(layoutManager);
         cart.setHasFixedSize(true);
 
-        productList = new ArrayList<>();
-        cartAdapter = new CartAdapter(productList);
+        cartList = new ArrayList<>();
+        cartAdapter = new CartAdapter(cartList);
         cart.setAdapter(cartAdapter);
 
         viewModel.getProductList().observe(this, products -> {
@@ -122,21 +123,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         repository.updateProduct(product);
 
         if (product.isSelected()) {
-            productList.add(product);
+            cartList.add(new Cart(product, 1));
         } else {
-            int index = getIndex(productList, product.getNama());
-            productList.remove(index);
+            int index = getIndex(cartList, product.getNama());
+            cartList.remove(index);
         }
 
         cartAdapter.notifyDataSetChanged();
     }
 
-    private int getIndex(List<Product> productList, String nama) {
+    private int getIndex(List<Cart> cartList, String nama) {
         int index = -1;
 
-        for (Product pr: productList) {
-            if (pr.getNama().equals(nama)) {
-                index = productList.indexOf(pr);
+        for (Cart cart: cartList) {
+            if (cart.getProduct().getNama().equals(nama)) {
+                index = cartList.indexOf(cart);
             }
         }
 
