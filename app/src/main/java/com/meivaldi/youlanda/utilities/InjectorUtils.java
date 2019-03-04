@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.meivaldi.youlanda.AppExecutors;
 import com.meivaldi.youlanda.data.ProductRepository;
-import com.meivaldi.youlanda.data.database.ProductDatabase;
+import com.meivaldi.youlanda.data.database.product.ProductDatabase;
 import com.meivaldi.youlanda.data.network.ProductNetworkDataSource;
 import com.meivaldi.youlanda.ui.MainViewModelFactory;
 

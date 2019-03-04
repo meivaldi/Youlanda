@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.meivaldi.youlanda.AppExecutors;
-import com.meivaldi.youlanda.data.database.Product;
-import com.meivaldi.youlanda.data.database.ProductDAO;
+import com.meivaldi.youlanda.data.database.product.Product;
+import com.meivaldi.youlanda.data.database.product.ProductDAO;
 import com.meivaldi.youlanda.data.network.ProductNetworkDataSource;
 
 import java.util.List;

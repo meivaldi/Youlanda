@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.meivaldi.youlanda.data.ProductRepository;
-import com.meivaldi.youlanda.data.database.Product;
+import com.meivaldi.youlanda.data.database.product.Product;
 
 import java.util.List;
 

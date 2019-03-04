@@ -3,8 +3,12 @@
 
     <data>
         <variable
+            name="cart"
+            type="com.meivaldi.youlanda.data.database.cart.Cart" />
+
+        <variable
             name="product"
-            type="com.meivaldi.youlanda.data.database.Product" />
+            type="com.meivaldi.youlanda.data.database.product.Product" />
 
         <import type="com.meivaldi.youlanda.utilities.DataBindingUtils" />
     </data>
@@ -74,7 +78,7 @@
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="1"
+                    android:text="@{DataBindingUtils.convertToString(cart.quantity)}"
                     android:textSize="25dp"
                     android:textColor="@android:color/black" />
 

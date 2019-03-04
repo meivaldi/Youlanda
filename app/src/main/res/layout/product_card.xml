@@ -4,7 +4,7 @@
     <data>
         <variable
             name="product"
-            type="com.meivaldi.youlanda.data.database.Product" />
+            type="com.meivaldi.youlanda.data.database.product.Product" />
 
         <import type="com.meivaldi.youlanda.utilities.DataBindingUtils" />
     </data>

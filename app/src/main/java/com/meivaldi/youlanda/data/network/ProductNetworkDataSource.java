@@ -15,7 +15,7 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 import com.meivaldi.youlanda.AppExecutors;
-import com.meivaldi.youlanda.data.database.Product;
+import com.meivaldi.youlanda.data.database.product.Product;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
