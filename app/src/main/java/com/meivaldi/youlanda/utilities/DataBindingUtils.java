@@ -6,4 +6,8 @@ public class DataBindingUtils {
         return "Rp." + string + ",-";
     }
 
+    public static String convertToString(int quantity) {
+        return String.valueOf(quantity);
+    }
+
 }

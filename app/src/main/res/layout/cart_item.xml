@@ -6,6 +6,10 @@
             name="cart"
             type="com.meivaldi.youlanda.data.database.cart.Cart" />
 
+        <variable
+            name="product"
+            type="com.meivaldi.youlanda.data.database.product.Product" />
+
         <import type="com.meivaldi.youlanda.utilities.DataBindingUtils" />
     </data>
 
@@ -26,13 +30,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:text="@{cart.product.nama}" />
+                android:text="@{product.nama}" />
 
             <TextView
                 android:id="@+id/harga"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{DataBindingUtils.convert(cart.product.harga)}"
+                android:text="@{DataBindingUtils.convert(product.harga)}"
                 android:textSize="18dp" />
 
         </LinearLayout>
@@ -74,7 +78,7 @@
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@{cart.quantity}"
+                    android:text="@{DataBindingUtils.convertToString(cart.quantity)}"
                     android:textSize="25dp"
                     android:textColor="@android:color/black" />
 

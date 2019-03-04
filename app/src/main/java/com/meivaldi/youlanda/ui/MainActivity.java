@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cart.setHasFixedSize(true);
 
         cartList = new ArrayList<>();
-        cartAdapter = new CartAdapter(cartList);
+        cartAdapter = new CartAdapter(getApplicationContext(), cartList);
         cart.setAdapter(cartAdapter);
 
         viewModel.getProductList().observe(this, products -> {

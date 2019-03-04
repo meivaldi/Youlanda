@@ -3,6 +3,8 @@ package com.meivaldi.youlanda.data.database.product;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
@@ -11,8 +13,10 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.annotations.SerializedName;
 
+import com.meivaldi.youlanda.BR;
+
 @Entity(tableName = "product")
-public class Product {
+public class Product extends BaseObservable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -58,32 +62,49 @@ public class Product {
         return id;
     }
 
+    @Bindable
     public String getNama() {
         return nama;
     }
 
+    @Bindable
     public String getFoto() {
         return foto;
     }
 
+    @Bindable
     public String getHarga() {
         return harga;
     }
 
+    @Bindable
     public String getJenis() {
         return jenis;
     }
 
+    @Bindable
     public String getStok() {
         return stok;
     }
 
+    @Bindable
     public boolean isSelected() {
         return selected;
     }
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+        notifyPropertyChanged(BR.selected);
+    }
+
+    public void setNama(String nama) {
+        this.nama = nama;
+        notifyPropertyChanged(BR.nama);
+    }
+
+    public void setHarga(String harga) {
+        this.harga = harga;
+        notifyPropertyChanged(BR.harga);
     }
 
     @BindingAdapter({"android:productImage"})
