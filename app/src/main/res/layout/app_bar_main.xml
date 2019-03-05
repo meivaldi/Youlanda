@@ -311,14 +311,12 @@
 
             </android.support.design.widget.AppBarLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/product_list"
+            <FrameLayout
+                android:id="@+id/frame_layout"
                 android:layout_below="@id/appbar"
                 android:layout_toLeftOf="@id/checkout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"
-                tools:listitem="@layout/product_card" />
+                android:layout_height="match_parent" />
 
         </RelativeLayout>
 

@@ -6,6 +6,8 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,6 +28,9 @@ import com.meivaldi.youlanda.data.database.cart.Cart;
 import com.meivaldi.youlanda.data.database.order.Order;
 import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
+import com.meivaldi.youlanda.ui.fragment.BreadFragment;
+import com.meivaldi.youlanda.ui.fragment.SpongeFragment;
+import com.meivaldi.youlanda.ui.fragment.TartFragment;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 
 import java.util.ArrayList;
@@ -34,9 +39,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
     ProductAdapter.ProductAdapterListener {
 
-    private MainActivityViewModel viewModel;
-    private RecyclerView recyclerView, cart;
-    private ProductAdapter adapter;
+    private RecyclerView cart;
     private CartAdapter cartAdapter;
     private List<Cart> cartList;
     private Order order;
@@ -64,15 +67,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = binding.navView;
         navigationView.setNavigationItemSelectedListener(this);
 
-        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getApplicationContext(), "bolu");
-        viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
-
-        recyclerView = binding.content.productList;
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 4);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(4, dpToPx(10), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
         cart = binding.content.recyclerView;
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -87,10 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         binding.setOrder(order);
 
-        viewModel.getProductList().observe(this, products -> {
-            adapter = new ProductAdapter(products, this);
-            recyclerView.setAdapter(adapter);
-        });
+        loadFragment(new BreadFragment());
     }
 
     @Override
@@ -110,11 +101,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.bread) {
-
+            loadFragment(new BreadFragment());
         } else if (id == R.id.tart) {
-
+            loadFragment(new TartFragment());
         } else if (id == R.id.sponge) {
-
+            loadFragment(new SpongeFragment());
         }
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -155,43 +146,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return index;
     }
 
-    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int spanCount;
-        private int spacing;
-        private boolean includeEdge;
-
-        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
-            this.spanCount = spanCount;
-            this.spacing = spacing;
-            this.includeEdge = includeEdge;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int position = parent.getChildAdapterPosition(view);
-            int column = position % spanCount;
-
-            if (includeEdge) {
-                outRect.left = spacing - column * spacing / spanCount;
-                outRect.right = (column + 1) * spacing / spanCount;
-
-                if (position < spanCount) {
-                    outRect.top = spacing;
-                }
-                outRect.bottom = spacing;
-            } else {
-                outRect.left = column * spacing / spanCount;
-                outRect.right = spacing - (column + 1) * spacing / spanCount;
-                if (position >= spanCount) {
-                    outRect.top = spacing;
-                }
-            }
-        }
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
-    }
 }
