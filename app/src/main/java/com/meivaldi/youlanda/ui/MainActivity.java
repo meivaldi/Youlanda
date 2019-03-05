@@ -1,10 +1,7 @@
 package com.meivaldi.youlanda.ui;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,17 +10,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.meivaldi.youlanda.R;
-import com.meivaldi.youlanda.data.ProductRepository;
 import com.meivaldi.youlanda.data.database.cart.Cart;
 import com.meivaldi.youlanda.data.database.order.Order;
 import com.meivaldi.youlanda.data.database.product.Product;
@@ -31,13 +23,14 @@ import com.meivaldi.youlanda.databinding.ActivityMainBinding;
 import com.meivaldi.youlanda.ui.fragment.BreadFragment;
 import com.meivaldi.youlanda.ui.fragment.SpongeFragment;
 import com.meivaldi.youlanda.ui.fragment.TartFragment;
-import com.meivaldi.youlanda.utilities.InjectorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-    ProductAdapter.ProductAdapterListener {
+        BreadFragment.BreadFragmentListener,
+        TartFragment.TartFragmentListener,
+        SpongeFragment.SpongeFragmentListener {
 
     private RecyclerView cart;
     private CartAdapter cartAdapter;
@@ -81,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         binding.setOrder(order);
 
-        loadFragment(new BreadFragment());
+        loadFragment(new BreadFragment(this));
     }
 
     @Override
@@ -101,37 +94,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.bread) {
-            loadFragment(new BreadFragment());
+            loadFragment(new BreadFragment(this));
         } else if (id == R.id.tart) {
-            loadFragment(new TartFragment());
+            loadFragment(new TartFragment(this));
         } else if (id == R.id.sponge) {
-            loadFragment(new SpongeFragment());
+            loadFragment(new SpongeFragment(this));
         }
 
         DrawerLayout drawer = binding.drawerLayout;
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onProductClicked(Product product) {
-        product.setSelected(product.isSelected() ? false : true);
-        ProductRepository repository = InjectorUtils.provideRepository(getApplicationContext());
-        repository.updateProduct(product);
-
-        if (product.isSelected()) {
-            cartList.add(new Cart(product, 1));
-        } else {
-            int index = getIndex(cartList, product.getNama());
-            cartList.remove(index);
-        }
-
-        order.setCartSum(cartList.size());
-        order.setTotal();
-        order.setTax();
-        order.setPrice();
-
-        cartAdapter.notifyDataSetChanged();
     }
 
     private int getIndex(List<Cart> cartList, String nama) {
@@ -153,4 +125,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.commit();
     }
 
+    @Override
+    public void onBreadProductClicked(Product product) {
+        if (product.isSelected()) {
+            cartList.add(new Cart(product, 1));
+        } else {
+            int index = getIndex(cartList, product.getNama());
+            cartList.remove(index);
+        }
+
+        order.setCartSum(cartList.size());
+        order.setTotal();
+        order.setTax();
+        order.setPrice();
+
+        cartAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSpongeProductListener(Product product) {
+        if (product.isSelected()) {
+            cartList.add(new Cart(product, 1));
+        } else {
+            int index = getIndex(cartList, product.getNama());
+            cartList.remove(index);
+        }
+
+        order.setCartSum(cartList.size());
+        order.setTotal();
+        order.setTax();
+        order.setPrice();
+
+        cartAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onTartProductClicked(Product product) {
+        if (product.isSelected()) {
+            cartList.add(new Cart(product, 1));
+        } else {
+            int index = getIndex(cartList, product.getNama());
+            cartList.remove(index);
+        }
+
+        order.setCartSum(cartList.size());
+        order.setTotal();
+        order.setTax();
+        order.setPrice();
+
+        cartAdapter.notifyDataSetChanged();
+    }
 }

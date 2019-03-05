@@ -1,5 +1,6 @@
 package com.meivaldi.youlanda.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
@@ -23,12 +24,19 @@ import com.meivaldi.youlanda.ui.MainViewModelFactory;
 import com.meivaldi.youlanda.ui.ProductAdapter;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 
+@SuppressLint("ValidFragment")
 public class SpongeFragment extends Fragment implements ProductAdapter.ProductAdapterListener {
 
     private MainActivityViewModel viewModel;
     private FragmentSpongeBinding binding;
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
+
+    private SpongeFragmentListener listener;
+
+    public SpongeFragment(SpongeFragmentListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +66,8 @@ public class SpongeFragment extends Fragment implements ProductAdapter.ProductAd
         product.setSelected(product.isSelected() ? false : true);
         ProductRepository repository = InjectorUtils.provideRepository(getContext());
         repository.updateProduct(product);
+
+        listener.onSpongeProductListener(product);
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
@@ -98,6 +108,10 @@ public class SpongeFragment extends Fragment implements ProductAdapter.ProductAd
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+
+    public interface SpongeFragmentListener {
+        void onSpongeProductListener(Product product);
     }
 
 }

@@ -1,10 +1,12 @@
 package com.meivaldi.youlanda.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,12 +25,19 @@ import com.meivaldi.youlanda.ui.MainViewModelFactory;
 import com.meivaldi.youlanda.ui.ProductAdapter;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 
+@SuppressLint("ValidFragment")
 public class BreadFragment extends Fragment implements ProductAdapter.ProductAdapterListener {
 
     private MainActivityViewModel viewModel;
     private FragmentBreadBinding binding;
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
+
+    private BreadFragmentListener listener;
+
+    public BreadFragment(BreadFragmentListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +67,8 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
         product.setSelected(product.isSelected() ? false : true);
         ProductRepository repository = InjectorUtils.provideRepository(getContext());
         repository.updateProduct(product);
+
+        listener.onBreadProductClicked(product);
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
@@ -98,5 +109,9 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+
+    public interface BreadFragmentListener {
+        void onBreadProductClicked(Product product);
     }
 }
