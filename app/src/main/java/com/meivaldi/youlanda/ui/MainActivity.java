@@ -99,31 +99,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ProductRepository repository = InjectorUtils.provideRepository(getApplicationContext());
 
         if (id == R.id.bread) {
-            Product product;
-
-            for (int i=0; i<cartList.size(); i++) {
-                product = cartList.get(i).getProduct();
-                repository.updateProduct(product);
-            }
-
             loadFragment(new BreadFragment(this));
         } else if (id == R.id.tart) {
-            Product product;
-
-            for (int i=0; i<cartList.size(); i++) {
-                product = cartList.get(i).getProduct();
-                repository.updateProduct(product);
-            }
-
             loadFragment(new TartFragment(this));
         } else if (id == R.id.sponge) {
-            Product product;
-
-            for (int i=0; i<cartList.size(); i++) {
-                product = cartList.get(i).getProduct();
-                repository.updateProduct(product);
-            }
-
             loadFragment(new SpongeFragment(this));
         }
 

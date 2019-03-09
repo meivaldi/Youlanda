@@ -25,6 +25,8 @@ import com.meivaldi.youlanda.ui.MainViewModelFactory;
 import com.meivaldi.youlanda.ui.ProductAdapter;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 
+import java.util.List;
+
 @SuppressLint("ValidFragment")
 public class TartFragment extends Fragment implements ProductAdapter.ProductAdapterListener {
 
@@ -32,7 +34,7 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
     private FragmentTartBinding binding;
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
-
+    private List<Product> productList;
     private TartFragmentListener listener;
 
     @SuppressLint("ValidFragment")
@@ -55,7 +57,8 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
         viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
 
         viewModel.getProductList().observe(this, products -> {
-            adapter = new ProductAdapter(products, this);
+            this.productList = products;
+            adapter = new ProductAdapter(productList, this);
             recyclerView.setAdapter(adapter);
         });
 
@@ -110,8 +113,6 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
         if (stok <= 0) {
             if (product.isSelected()) {
                 product.setSelected(product.isSelected() ? false : true);
-                /*ProductRepository repository = InjectorUtils.provideRepository(getContext());
-                repository.updateProduct(product);*/
 
                 listener.onTartProductClicked(product);
             } else {
@@ -119,8 +120,6 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
             }
         } else {
             product.setSelected(product.isSelected() ? false : true);
-            /*ProductRepository repository = InjectorUtils.provideRepository(getContext());
-            repository.updateProduct(product);*/
 
             listener.onTartProductClicked(product);
         }
@@ -128,6 +127,17 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
 
     public interface TartFragmentListener {
         void onTartProductClicked(Product product);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        ProductRepository repository = InjectorUtils.provideRepository(getContext());
+
+        for (Product product: productList) {
+            repository.updateProduct(product);
+        }
     }
 
 }

@@ -26,6 +26,8 @@ import com.meivaldi.youlanda.ui.MainViewModelFactory;
 import com.meivaldi.youlanda.ui.ProductAdapter;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 
+import java.util.List;
+
 @SuppressLint("ValidFragment")
 public class BreadFragment extends Fragment implements ProductAdapter.ProductAdapterListener {
 
@@ -33,6 +35,7 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
     private FragmentBreadBinding binding;
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
+    private List<Product> productList;
 
     private BreadFragmentListener listener;
 
@@ -55,7 +58,8 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
         viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
 
         viewModel.getProductList().observe(this, products -> {
-            adapter = new ProductAdapter(products, this);
+            this.productList = products;
+            adapter = new ProductAdapter(productList, this);
             recyclerView.setAdapter(adapter);
         });
 
@@ -70,8 +74,6 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
         if (stok <= 0) {
             if (product.isSelected()) {
                 product.setSelected(product.isSelected() ? false : true);
-                /*ProductRepository repository = InjectorUtils.provideRepository(getContext());
-                repository.updateProduct(product);*/
 
                 listener.onBreadProductClicked(product);
             } else {
@@ -79,8 +81,6 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
             }
         } else {
             product.setSelected(product.isSelected() ? false : true);
-            /*ProductRepository repository = InjectorUtils.provideRepository(getContext());
-            repository.updateProduct(product);*/
 
             listener.onBreadProductClicked(product);
         }
@@ -128,5 +128,16 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
 
     public interface BreadFragmentListener {
         void onBreadProductClicked(Product product);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        ProductRepository repository = InjectorUtils.provideRepository(getContext());
+
+        for (Product product: productList) {
+            repository.updateProduct(product);
+        }
     }
 }
