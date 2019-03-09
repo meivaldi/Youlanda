@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.meivaldi.youlanda.R;
+import com.meivaldi.youlanda.data.ProductRepository;
 import com.meivaldi.youlanda.data.database.cart.Cart;
 import com.meivaldi.youlanda.data.database.order.Order;
 import com.meivaldi.youlanda.data.database.product.Product;
@@ -23,6 +24,7 @@ import com.meivaldi.youlanda.databinding.ActivityMainBinding;
 import com.meivaldi.youlanda.ui.fragment.BreadFragment;
 import com.meivaldi.youlanda.ui.fragment.SpongeFragment;
 import com.meivaldi.youlanda.ui.fragment.TartFragment;
+import com.meivaldi.youlanda.utilities.InjectorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setCartSum(cartList.size());
         order.setTotal();
         order.setTax();
+        order.setDiskon();
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
@@ -154,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setCartSum(cartList.size());
         order.setTotal();
         order.setTax();
+        order.setDiskon();
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
@@ -171,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setCartSum(cartList.size());
         order.setTotal();
         order.setTax();
+        order.setDiskon();
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();

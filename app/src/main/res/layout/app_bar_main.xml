@@ -141,7 +141,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Rp. 0,-" />
+                            android:text="@{DataBindingUtils.countDiscount(order.diskon)}" />
 
                     </RelativeLayout>
 
@@ -311,9 +311,19 @@
 
             </android.support.design.widget.AppBarLayout>
 
+            <ScrollView
+                android:id="@+id/top_seller"
+                android:layout_below="@id/appbar"
+                android:layout_toLeftOf="@id/checkout"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scrollbars="horizontal">
+
+            </ScrollView>
+
             <FrameLayout
                 android:id="@+id/frame_layout"
-                android:layout_below="@id/appbar"
+                android:layout_below="@id/top_seller"
                 android:layout_toLeftOf="@id/checkout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

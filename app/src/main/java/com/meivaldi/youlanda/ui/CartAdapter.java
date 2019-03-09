@@ -53,9 +53,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
             @Override
             public void onClick(View v) {
                 int quantity = cart.getQuantity() + 1;
+
                 cart.setQuantity(quantity);
                 order.setTotal();
                 order.setTax();
+                order.setDiskon();
                 order.setPrice();
             }
         });
@@ -72,6 +74,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                     cart.setQuantity(quantity);
                     order.setTotal();
                     order.setTax();
+                    order.setDiskon();
                     order.setPrice();
                 }
             }

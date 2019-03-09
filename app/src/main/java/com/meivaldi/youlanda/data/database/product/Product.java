@@ -36,25 +36,30 @@ public class Product extends BaseObservable {
     @SerializedName("stok")
     private String stok;
 
+    @SerializedName("diskon")
+    private String diskon;
+
     private boolean selected;
 
-    public Product(int id, String nama, String foto, String harga, String jenis, String stok) {
+    public Product(int id, String nama, String foto, String harga, String jenis, String stok, String diskon) {
         this.id = id;
         this.nama = nama;
         this.foto = foto;
         this.harga = harga;
         this.jenis = jenis;
         this.stok = stok;
+        this.diskon = diskon;
         this.selected = false;
     }
 
     @Ignore
-    public Product(String nama, String foto, String harga, String jenis, String stok) {
+    public Product(String nama, String foto, String harga, String jenis, String stok, String diskon) {
         this.nama = nama;
         this.foto = foto;
         this.harga = harga;
         this.jenis = jenis;
         this.stok = stok;
+        this.diskon = diskon;
         this.selected = false;
     }
 
@@ -88,6 +93,11 @@ public class Product extends BaseObservable {
     }
 
     @Bindable
+    public String getDiskon() {
+        return diskon;
+    }
+
+    @Bindable
     public boolean isSelected() {
         return selected;
     }
@@ -105,6 +115,11 @@ public class Product extends BaseObservable {
     public void setHarga(String harga) {
         this.harga = harga;
         notifyPropertyChanged(BR.harga);
+    }
+
+    public void setStok(String stok) {
+        this.stok = stok;
+        notifyPropertyChanged(BR.stok);
     }
 
     @BindingAdapter({"android:productImage"})

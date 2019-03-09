@@ -23,4 +23,12 @@ public class DataBindingUtils {
         return "Rp." + price + ",-";
     }
 
+    public static String stock(String stok) {
+        return "Stok: " + stok;
+    }
+
+    public static String countDiscount(int diskon) {
+        return "- Rp. " + diskon;
+    }
+
 }

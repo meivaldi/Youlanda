@@ -14,6 +14,7 @@ public class Order extends BaseObservable {
     private int price;
     private int tax;
     private int total;
+    private int diskon;
     private List<Cart> cartList;
 
     public Order(List<Cart> cartList) {
@@ -21,6 +22,7 @@ public class Order extends BaseObservable {
         this.price = 0;
         this.tax = 0;
         this.total = 0;
+        this.diskon = 0;
         this.cartList = cartList;
     }
 
@@ -40,7 +42,7 @@ public class Order extends BaseObservable {
     }
 
     public void setPrice() {
-        price = total + tax;
+        price = total + tax - diskon;
         notifyPropertyChanged(BR.price);
     }
 
@@ -52,6 +54,22 @@ public class Order extends BaseObservable {
     public void setTax() {
         tax = (total * 10) / 100;
         notifyPropertyChanged(BR.tax);
+    }
+
+    @Bindable
+    public int getDiskon() {
+        return diskon;
+    }
+
+    public void setDiskon() {
+        int temp = 0;
+
+        for (Cart cart: cartList) {
+            temp += (Integer.valueOf(cart.getProduct().getHarga()) * Float.valueOf(cart.getProduct().getDiskon()));
+        }
+
+        diskon = temp;
+        notifyPropertyChanged(BR.diskon);
     }
 
     @Bindable
