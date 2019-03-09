@@ -69,8 +69,8 @@ public class SpongeFragment extends Fragment implements ProductAdapter.ProductAd
         if (stok <= 0) {
             if (product.isSelected()) {
                 product.setSelected(product.isSelected() ? false : true);
-                ProductRepository repository = InjectorUtils.provideRepository(getContext());
-                repository.updateProduct(product);
+                /*ProductRepository repository = InjectorUtils.provideRepository(getContext());
+                repository.updateProduct(product);*/
 
                 listener.onSpongeProductListener(product);
             } else {
@@ -78,8 +78,8 @@ public class SpongeFragment extends Fragment implements ProductAdapter.ProductAd
             }
         } else {
             product.setSelected(product.isSelected() ? false : true);
-            ProductRepository repository = InjectorUtils.provideRepository(getContext());
-            repository.updateProduct(product);
+            /*ProductRepository repository = InjectorUtils.provideRepository(getContext());
+            repository.updateProduct(product);*/
 
             listener.onSpongeProductListener(product);
         }

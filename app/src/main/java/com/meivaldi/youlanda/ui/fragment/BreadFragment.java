@@ -70,8 +70,8 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
         if (stok <= 0) {
             if (product.isSelected()) {
                 product.setSelected(product.isSelected() ? false : true);
-                ProductRepository repository = InjectorUtils.provideRepository(getContext());
-                repository.updateProduct(product);
+                /*ProductRepository repository = InjectorUtils.provideRepository(getContext());
+                repository.updateProduct(product);*/
 
                 listener.onBreadProductClicked(product);
             } else {
@@ -79,8 +79,8 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
             }
         } else {
             product.setSelected(product.isSelected() ? false : true);
-            ProductRepository repository = InjectorUtils.provideRepository(getContext());
-            repository.updateProduct(product);
+            /*ProductRepository repository = InjectorUtils.provideRepository(getContext());
+            repository.updateProduct(product);*/
 
             listener.onBreadProductClicked(product);
         }

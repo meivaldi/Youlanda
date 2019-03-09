@@ -110,8 +110,8 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
         if (stok <= 0) {
             if (product.isSelected()) {
                 product.setSelected(product.isSelected() ? false : true);
-                ProductRepository repository = InjectorUtils.provideRepository(getContext());
-                repository.updateProduct(product);
+                /*ProductRepository repository = InjectorUtils.provideRepository(getContext());
+                repository.updateProduct(product);*/
 
                 listener.onTartProductClicked(product);
             } else {
@@ -119,8 +119,8 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
             }
         } else {
             product.setSelected(product.isSelected() ? false : true);
-            ProductRepository repository = InjectorUtils.provideRepository(getContext());
-            repository.updateProduct(product);
+            /*ProductRepository repository = InjectorUtils.provideRepository(getContext());
+            repository.updateProduct(product);*/
 
             listener.onTartProductClicked(product);
         }
