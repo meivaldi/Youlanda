@@ -31,4 +31,14 @@ public class DataBindingUtils {
         return "- Rp. " + diskon;
     }
 
+    public static boolean isStockEmpty(String stok) {
+        int stock = Integer.valueOf(stok);
+
+        if (stock <= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

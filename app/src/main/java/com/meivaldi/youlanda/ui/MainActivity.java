@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int getIndex(List<Cart> cartList, String nama) {
         int index = -1;
 
-        for (Cart cart: cartList) {
+        for (Cart cart : cartList) {
             if (cart.getProduct().getNama().equals(nama)) {
                 index = cartList.indexOf(cart);
             }
@@ -129,10 +130,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBreadProductClicked(Product product) {
+        int stok = Integer.valueOf(product.getStok());
+
         if (product.isSelected()) {
             cartList.add(new Cart(product, 1));
+
+            stok -= 1;
+            product.setStok(String.valueOf(stok));
         } else {
             int index = getIndex(cartList, product.getNama());
+
+            stok += cartList.get(index).getQuantity();
+            product.setStok(String.valueOf(stok));
+
             cartList.remove(index);
         }
 
@@ -147,10 +157,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onSpongeProductListener(Product product) {
+        int stok = Integer.valueOf(product.getStok());
+
         if (product.isSelected()) {
             cartList.add(new Cart(product, 1));
+
+            stok -= 1;
+            product.setStok(String.valueOf(stok));
         } else {
             int index = getIndex(cartList, product.getNama());
+
+            stok += cartList.get(index).getQuantity();
+            product.setStok(String.valueOf(stok));
+
             cartList.remove(index);
         }
 
@@ -165,10 +184,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onTartProductClicked(Product product) {
+        int stok = Integer.valueOf(product.getStok());
+
         if (product.isSelected()) {
             cartList.add(new Cart(product, 1));
+
+            stok -= 1;
+            product.setStok(String.valueOf(stok));
         } else {
             int index = getIndex(cartList, product.getNama());
+
+            stok += cartList.get(index).getQuantity();
+            product.setStok(String.valueOf(stok));
+
             cartList.remove(index);
         }
 

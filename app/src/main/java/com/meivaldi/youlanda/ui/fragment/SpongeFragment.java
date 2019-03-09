@@ -14,6 +14,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
@@ -63,11 +64,25 @@ public class SpongeFragment extends Fragment implements ProductAdapter.ProductAd
 
     @Override
     public void onProductClicked(Product product) {
-        product.setSelected(product.isSelected() ? false : true);
-        ProductRepository repository = InjectorUtils.provideRepository(getContext());
-        repository.updateProduct(product);
+        int stok = Integer.valueOf(product.getStok());
 
-        listener.onSpongeProductListener(product);
+        if (stok <= 0) {
+            if (product.isSelected()) {
+                product.setSelected(product.isSelected() ? false : true);
+                ProductRepository repository = InjectorUtils.provideRepository(getContext());
+                repository.updateProduct(product);
+
+                listener.onSpongeProductListener(product);
+            } else {
+                Toast.makeText(getContext(), "Stok habis!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            product.setSelected(product.isSelected() ? false : true);
+            ProductRepository repository = InjectorUtils.provideRepository(getContext());
+            repository.updateProduct(product);
+
+            listener.onSpongeProductListener(product);
+        }
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {

@@ -73,7 +73,7 @@
                     android:layout_below="@id/harga_produk"
                     android:layout_centerHorizontal="true"
                     android:text="@{DataBindingUtils.stock(product.stok)}"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@{DataBindingUtils.isStockEmpty(product.stok) ? @android:color/holo_red_dark : @color/colorPrimary}"
                     android:textSize="22dp"
                     android:textStyle="bold"/>
 
