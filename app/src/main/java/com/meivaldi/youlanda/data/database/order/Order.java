@@ -65,7 +65,7 @@ public class Order extends BaseObservable {
         int temp = 0;
 
         for (Cart cart: cartList) {
-            temp += (Integer.valueOf(cart.getProduct().getHarga()) * Float.valueOf(cart.getProduct().getDiskon()));
+            temp += ((Integer.valueOf(cart.getProduct().getHarga()) * cart.getQuantity()) * Float.valueOf(cart.getProduct().getDiskon()));
         }
 
         diskon = temp;
