@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private SearchView searchView;
-
+    private ProductAdapter mAdapter;
     private ActivityMainBinding binding;
 
     @Override
@@ -119,8 +119,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        ProductRepository repository = InjectorUtils.provideRepository(getApplicationContext());
 
         if (id == R.id.bread) {
             loadFragment(new BreadFragment(this));
@@ -262,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cartAdapter.notifyDataSetChanged();
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
@@ -271,16 +269,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .getActionView();
         searchView.setSearchableInfo(searchManager
                 .getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setMaxWidth(1000);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                mAdapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
+                mAdapter.getFilter().filter(query);
                 return false;
             }
         });
@@ -297,5 +297,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return super.onOptionsItemSelected(item);
+    } */
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
     }
 }

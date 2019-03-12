@@ -28,6 +28,7 @@
 
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/appbar"
+                android:layout_toLeftOf="@id/checkout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -37,6 +38,7 @@
                     android:layout_height="?attr/actionBarSize"
                     android:theme="@style/Toolbar"
                     android:titleTextColor="@android:color/white"
+                    app:subtitleTextColor="@android:color/white"
                     app:titleTextColor="@android:color/white">
 
                     <ImageView
@@ -54,6 +56,14 @@
                 </android.support.v7.widget.Toolbar>
 
             </android.support.design.widget.AppBarLayout>
+
+            <LinearLayout
+                android:id="@+id/checkout_bar"
+                android:layout_toRightOf="@id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical"></LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/checkout"
