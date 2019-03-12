@@ -6,18 +6,55 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.databinding.ProductCardBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder> {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder> implements Filterable {
 
     private List<Product> productList;
+    private List<Product> productListFiltered;
     private LayoutInflater layoutInflater;
     private ProductAdapterListener listener;
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charString = constraint.toString();
+                if (charString.isEmpty()) {
+                    productListFiltered = productList;
+                } else {
+                    List<Product> filteredList = new ArrayList<>();
+                    for (Product product: productList) {
+                        if (product.getNama().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(product);
+                        }
+                    }
+
+                    productListFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = productListFiltered;
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                productListFiltered = (ArrayList<Product>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -31,6 +68,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     public ProductAdapter(List<Product> productList, ProductAdapterListener listener) {
         this.productList = productList;
+        this.productListFiltered = productList;
         this.listener = listener;
     }
 
@@ -48,7 +86,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
-        final Product product = productList.get(i);
+        final Product product = productListFiltered.get(i);
 
         myViewHolder.binding.setProduct(product);
         myViewHolder.binding.thumbnail.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +100,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     @Override
     public int getItemCount() {
-        return productList.size();
+        return productListFiltered.size();
     }
 
     public interface ProductAdapterListener {

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.meivaldi.youlanda.data.ProductRepository;
+import com.meivaldi.youlanda.data.database.product.Product;
 
 public class MainViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
@@ -22,4 +23,5 @@ public class MainViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         return (T) new MainActivityViewModel(repository, jenis);
     }
+
 }

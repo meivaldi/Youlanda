@@ -121,6 +121,20 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
         }
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (this.isVisible()) {
+            if (!isVisibleToUser) {
+                ProductRepository repository = InjectorUtils.provideRepository(getContext());
+                for (Product product: productList) {
+                    repository.updateProduct(product);
+                }
+            }
+        }
+    }
+
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
@@ -133,11 +147,5 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
     @Override
     public void onPause() {
         super.onPause();
-
-        ProductRepository repository = InjectorUtils.provideRepository(getContext());
-
-        for (Product product: productList) {
-            repository.updateProduct(product);
-        }
     }
 }

@@ -52,6 +52,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         myViewHolder.binding.setCart(cart);
         myViewHolder.binding.setProduct(cart.getProduct());
 
+        ProductRepository repository = InjectorUtils.provideRepository(context);
+
         myViewHolder.tambah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +61,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 int quantity = cart.getQuantity() + 1;
                 int stok = Integer.valueOf(product.getStok());
 
-                if ((stok-1) > 0) {
+                if ((stok-1) >= 0) {
                     stok -= 1;
                 } else {
                     Toast.makeText(context, "Stok tidak cukup!", Toast.LENGTH_SHORT).show();
@@ -72,6 +74,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 order.setTax();
                 order.setDiskon();
                 order.setPrice();
+
+                repository.updateProduct(product);
             }
         });
 
@@ -95,6 +99,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                     order.setDiskon();
                     order.setPrice();
                 }
+
+                repository.updateProduct(product);
             }
         });
     }

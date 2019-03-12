@@ -1,17 +1,24 @@
 package com.meivaldi.youlanda.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -19,7 +26,7 @@ import android.widget.Toast;
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
 import com.meivaldi.youlanda.data.database.product.Product;
-import com.meivaldi.youlanda.databinding.FragmentTartBinding;
+import com.meivaldi.youlanda.databinding.FragmentAllProductBinding;
 import com.meivaldi.youlanda.ui.MainActivityViewModel;
 import com.meivaldi.youlanda.ui.MainViewModelFactory;
 import com.meivaldi.youlanda.ui.ProductAdapter;
@@ -28,24 +35,25 @@ import com.meivaldi.youlanda.utilities.InjectorUtils;
 import java.util.List;
 
 @SuppressLint("ValidFragment")
-public class TartFragment extends Fragment implements ProductAdapter.ProductAdapterListener {
+public class AllProductFragment extends Fragment implements ProductAdapter.ProductAdapterListener {
 
     private MainActivityViewModel viewModel;
-    private FragmentTartBinding binding;
+    private FragmentAllProductBinding binding;
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
     private List<Product> productList;
-    private TartFragmentListener listener;
+    private SearchView searchView;
+    private AllProductFragmentListener listener;
 
     @SuppressLint("ValidFragment")
-    public TartFragment(TartFragmentListener listener) {
+    public AllProductFragment(AllProductFragmentListener listener) {
         this.listener = listener;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tart, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_all_product, container, false);
 
         recyclerView = binding.productList;
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 4);
@@ -53,7 +61,7 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(4, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getContext(), "tar");
+        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getContext(), "semua");
         viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
 
         viewModel.getProductList().observe(this, products -> {
@@ -64,6 +72,39 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
 
         View view = binding.getRoot();
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (this.isVisible()) {
+            if (!isVisibleToUser) {
+                ProductRepository repository = InjectorUtils.provideRepository(getContext());
+                for (Product product: productList) {
+                    repository.updateProduct(product);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onProductClicked(Product product) {
+        int stok = Integer.valueOf(product.getStok());
+
+        if (stok <= 0) {
+            if (product.isSelected()) {
+                product.setSelected(product.isSelected() ? false : true);
+
+                listener.onAllProductClicked(product);
+            } else {
+                Toast.makeText(getContext(), "Stok habis!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            product.setSelected(product.isSelected() ? false : true);
+
+            listener.onAllProductClicked(product);
+        }
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
@@ -106,46 +147,44 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
+    public interface AllProductFragmentListener {
+        void onAllProductClicked(Product product);
+    }
+
     @Override
-    public void onProductClicked(Product product) {
-        int stok = Integer.valueOf(product.getStok());
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
 
-        if (stok <= 0) {
-            if (product.isSelected()) {
-                product.setSelected(product.isSelected() ? false : true);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getActivity().getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
 
-                listener.onTartProductClicked(product);
-            } else {
-                Toast.makeText(getContext(), "Stok habis!", Toast.LENGTH_SHORT).show();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter(query);
+                return false;
             }
-        } else {
-            product.setSelected(product.isSelected() ? false : true);
 
-            listener.onTartProductClicked(product);
-        }
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if (this.isVisible()) {
-            if (!isVisibleToUser) {
-                ProductRepository repository = InjectorUtils.provideRepository(getContext());
-                for (Product product: productList) {
-                    repository.updateProduct(product);
-                }
+            @Override
+            public boolean onQueryTextChange(String query) {
+                adapter.getFilter().filter(query);
+                return false;
             }
-        }
-    }
-
-    public interface TartFragmentListener {
-        void onTartProductClicked(Product product);
+        });
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
+        if (id == R.id.action_search) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

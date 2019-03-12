@@ -1,19 +1,28 @@
 package com.meivaldi.youlanda.ui;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.meivaldi.youlanda.R;
@@ -22,6 +31,7 @@ import com.meivaldi.youlanda.data.database.cart.Cart;
 import com.meivaldi.youlanda.data.database.order.Order;
 import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
+import com.meivaldi.youlanda.ui.fragment.AllProductFragment;
 import com.meivaldi.youlanda.ui.fragment.BreadFragment;
 import com.meivaldi.youlanda.ui.fragment.SpongeFragment;
 import com.meivaldi.youlanda.ui.fragment.TartFragment;
@@ -31,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        AllProductFragment.AllProductFragmentListener,
         BreadFragment.BreadFragmentListener,
         TartFragment.TartFragmentListener,
         SpongeFragment.SpongeFragmentListener {
@@ -39,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CartAdapter cartAdapter;
     private List<Cart> cartList;
     private Order order;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private SearchView searchView;
 
     private ActivityMainBinding binding;
 
@@ -63,6 +77,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = binding.navView;
         navigationView.setNavigationItemSelectedListener(this);
 
+        tabLayout = binding.content.tabs;
+        viewPager = binding.content.viewpager;
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFrag(new AllProductFragment(this), "Semua");
+        viewPagerAdapter.addFrag(new BreadFragment(this), "Roti");
+        viewPagerAdapter.addFrag(new TartFragment(this), "Tar");
+        viewPagerAdapter.addFrag(new SpongeFragment(this), "Bolu");
+        viewPager.setAdapter(viewPagerAdapter);
+
+        tabLayout.setupWithViewPager(viewPager);
+
         cart = binding.content.recyclerView;
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -76,8 +102,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cart.setAdapter(cartAdapter);
 
         binding.setOrder(order);
-
-        loadFragment(new BreadFragment(this));
     }
 
     @Override
@@ -209,5 +233,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAllProductClicked(Product product) {
+        int stok = Integer.valueOf(product.getStok());
+
+        if (product.isSelected()) {
+            cartList.add(new Cart(product, 1));
+
+            stok -= 1;
+            product.setStok(String.valueOf(stok));
+        } else {
+            int index = getIndex(cartList, product.getNama());
+
+            stok += cartList.get(index).getQuantity();
+            product.setStok(String.valueOf(stok));
+
+            cartList.remove(index);
+        }
+
+        order.setCartSum(cartList.size());
+        order.setTotal();
+        order.setTax();
+        order.setDiskon();
+        order.setPrice();
+
+        cartAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_search) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

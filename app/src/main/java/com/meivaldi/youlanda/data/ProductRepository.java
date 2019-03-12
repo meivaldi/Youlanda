@@ -84,17 +84,38 @@ public class ProductRepository {
 
     public LiveData<List<Product>> getProducts(String jenis) {
         initializeData();
-        return productDAO.getAllProducts(jenis);
+
+        if (jenis.equals("semua")) {
+            return productDAO.getAllProducts();
+        } else {
+            return productDAO.getAllProducts(jenis);
+        }
+    }
+
+    public LiveData<List<Product>> getAllProducts() {
+        initializeData();
+        return productDAO.getAllProducts();
     }
 
     public void updateProduct(Product product) {
         new UpdateProduct().execute(product);
     }
 
+    public void updateAllProduct(List<Product> productList) {
+
+    }
+
     private class UpdateProduct extends AsyncTask<Product, Void, Void> {
         @Override
         protected Void doInBackground(Product... products) {
             productDAO.updateProduct(products[0]);
+            return null;
+        }
+    }
+
+    private class UpdateAllProduct extends AsyncTask<Product, Void, Void> {
+        @Override
+        protected Void doInBackground(Product... products) {
             return null;
         }
     }
