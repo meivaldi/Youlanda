@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -52,9 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Order order;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private SearchView searchView;
-    private ProductAdapter mAdapter;
     private ActivityMainBinding binding;
+    private AppCompatSpinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +100,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         cartAdapter = new CartAdapter(getApplicationContext(), cartList, order);
         cart.setAdapter(cartAdapter);
+
+        List<String> jenisOrder = new ArrayList<>();
+        jenisOrder.add("Jenis Order");
+        jenisOrder.add("Beli Langsung");
+        jenisOrder.add("Ojek Online");
+
+        spinner = binding.content.jenisOrder;
+        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.custom_spinner, jenisOrder);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+
 
         binding.setOrder(order);
     }
@@ -259,45 +270,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         cartAdapter.notifyDataSetChanged();
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.action_search)
-                .getActionView();
-        searchView.setSearchableInfo(searchManager
-                .getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(1000);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                mAdapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                mAdapter.getFilter().filter(query);
-                return false;
-            }
-        });
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_search) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    } */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

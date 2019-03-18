@@ -124,6 +124,7 @@ public class AllProductFragment extends Fragment implements ProductAdapter.Produ
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.action_search)
                 .getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setSearchableInfo(searchManager
                 .getSearchableInfo(getActivity().getComponentName()));
 
