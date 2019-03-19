@@ -41,4 +41,12 @@ public class DataBindingUtils {
         }
     }
 
+    public static boolean isCartEmpty(int total) {
+        if (total > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
