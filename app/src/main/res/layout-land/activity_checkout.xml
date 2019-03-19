@@ -9,7 +9,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -51,6 +52,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="20dp"
                         android:drawableLeft="@drawable/baseline_person_black_24"
+                        android:drawablePadding="10dp"
                         android:text="Kasir"
                         android:textSize="24dp"
                         android:textStyle="bold" />
@@ -70,53 +72,51 @@
                     android:paddingBottom="16dp">
 
                     <LinearLayout
-                        android:id="@+id/information"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="true"
-                                android:text="Order No #000" />
-
-                            <TextView
-                                android:id="@+id/time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_marginLeft="10dp"
-                                android:text="14:00:08" />
-
-                            <TextView
-                                android:id="@+id/date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_toLeftOf="@id/time"
-                                android:text="Jum'at, 1/03/2019 " />
-
-                        </RelativeLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="3dp"
-                            android:background="#ddd" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/cash"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:text="Jenis Order" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:text="0"
+                                android:textStyle="bold"
+                                android:textColor="@color/colorPrimary"/>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:text="Served By" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:text="0"/>
+
+                        </RelativeLayout>
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -223,24 +223,23 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_toRightOf="@id/left_sidebar">
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/checkout_bar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/colorPrimary"
-                    android:orientation="vertical">
+                    android:background="@color/colorPrimary">
 
                     <TextView
+                        android:layout_centerVertical="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="10dp"
                         android:text="Pembayaran"
                         android:textColor="@android:color/white"
-                        android:textSize="30dp"
-                        android:textStyle="bold" />
+                        android:textSize="24dp" />
 
-                </LinearLayout>
+                </RelativeLayout>
 
             </RelativeLayout>
 

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.meivaldi.youlanda.ui.CheckoutActivity;
+
 public class MyClickHandler {
 
     private static Context context;
@@ -13,7 +15,7 @@ public class MyClickHandler {
     }
 
     public static void purchase(View view) {
-        //context.startActivity(new Intent(context, CheckoutActivity.class));
+        context.startActivity(new Intent(context, CheckoutActivity.class));
     }
 
 }

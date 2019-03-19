@@ -17,6 +17,10 @@
         <variable
             name="order"
             type="com.meivaldi.youlanda.data.database.order.Order" />
+
+        <variable
+            name="handlers"
+            type="com.meivaldi.youlanda.utilities.MyClickHandler" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -38,7 +42,8 @@
                 layout="@layout/app_bar_main"
                 bind:product="@{product}"
                 bind:cart="@{cart}"
-                bind:order="@{order}"/>
+                bind:order="@{order}"
+                bind:handlers="@{handlers}"/>
 
             <android.support.design.widget.NavigationView
                 android:id="@+id/nav_view"

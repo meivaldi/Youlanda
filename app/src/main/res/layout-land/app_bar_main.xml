@@ -93,21 +93,41 @@
                 android:background="@drawable/background"
                 android:elevation="8dp">
 
-                <TextView
-                    android:id="@+id/label"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/top_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:text="@{DataBindingUtils.count(order.cartSum)}"
-                    android:textColor="@android:color/black"
-                    android:textSize="30dp"
-                    android:textStyle="bold"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:drawableLeft="@drawable/baseline_person_black_24"
+                        android:text="Kasir"
+                        android:textColor="@android:color/black"
+                        android:textSize="24dp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:drawableLeft="@drawable/baseline_shopping_cart_black_24"
+                        android:text="@{DataBindingUtils.count(order.cartSum)}"
+                        android:textColor="@android:color/black"
+                        android:textSize="24dp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/information"
-                    android:layout_below="@id/label"
+                    android:layout_below="@id/top_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -253,7 +273,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:padding="10dp"
-                            android:background="@{DataBindingUtils.isCartEmpty(order.total) ? @drawable/background_small_icon : @drawable/background_button}"
+                            android:background="@{DataBindingUtils.isCartEmpty(order.cartSum) ? @drawable/background_button : @drawable/background_small_icon}"
                             android:orientation="vertical">
 
                             <ImageView
@@ -280,7 +300,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="10dp"
                             android:padding="10dp"
-                            android:background="@{DataBindingUtils.isCartEmpty(order.total) ? @drawable/background_small_icon : @drawable/background_button}"
+                            android:background="@{DataBindingUtils.isCartEmpty(order.cartSum) ? @drawable/background_button : @drawable/background_small_icon}"
                             android:orientation="vertical">
 
                             <ImageView
@@ -302,12 +322,12 @@
                         </LinearLayout>
 
                         <RelativeLayout
-                            android:background="@{DataBindingUtils.isCartEmpty(order.total) ? @drawable/background_small_icon : @drawable/background_button}"
+                            android:background="@{DataBindingUtils.isCartEmpty(order.cartSum) ? @drawable/background_button : @drawable/background_small_icon}"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="10dp"
-                            android:onClick="@{DataBindingUtils.isCartEmpty(order.total) ? handlers::purchase : null}">
+                            android:onClick="@{DataBindingUtils.isCartEmpty(order.cartSum) ? handlers::purchase : null}">
 
                             <TextView
                                 android:layout_width="wrap_content"

@@ -43,10 +43,10 @@ public class DataBindingUtils {
 
     public static boolean isCartEmpty(int total) {
         if (total > 0) {
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
 }

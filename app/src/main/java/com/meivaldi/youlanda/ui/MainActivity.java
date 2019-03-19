@@ -37,6 +37,7 @@ import com.meivaldi.youlanda.ui.fragment.BreadFragment;
 import com.meivaldi.youlanda.ui.fragment.SpongeFragment;
 import com.meivaldi.youlanda.ui.fragment.TartFragment;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
+import com.meivaldi.youlanda.utilities.MyClickHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ViewPager viewPager;
     private ActivityMainBinding binding;
     private AppCompatSpinner spinner;
+    private MyClickHandler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
 
+        handler = new MyClickHandler(this);
+        binding.setHandlers(handler);
 
         binding.setOrder(order);
     }
