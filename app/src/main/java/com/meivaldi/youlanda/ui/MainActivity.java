@@ -113,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
 
+        String jenis = spinner.getSelectedItem().toString();
+        order.setJenis(jenis);
+
         handler = new MyClickHandler(this);
         binding.setHandlers(handler);
 

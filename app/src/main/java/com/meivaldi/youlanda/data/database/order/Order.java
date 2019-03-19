@@ -6,15 +6,17 @@ import android.databinding.Bindable;
 import com.meivaldi.youlanda.BR;
 import com.meivaldi.youlanda.data.database.cart.Cart;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Order extends BaseObservable {
+public class Order extends BaseObservable implements Serializable {
 
     private int cartSum;
     private int price;
     private int tax;
     private int total;
     private int diskon;
+    private String jenis;
     private List<Cart> cartList;
 
     public Order(List<Cart> cartList) {
@@ -24,6 +26,7 @@ public class Order extends BaseObservable {
         this.total = 0;
         this.diskon = 0;
         this.cartList = cartList;
+        this.jenis = "Beli Langsung";
     }
 
     @Bindable
@@ -88,4 +91,13 @@ public class Order extends BaseObservable {
         notifyPropertyChanged(BR.total);
     }
 
+    @Bindable
+    public String getJenis() {
+        return jenis;
+    }
+
+    public void setJenis(String jenis) {
+        this.jenis = jenis;
+        notifyPropertyChanged(BR.jenis);
+    }
 }

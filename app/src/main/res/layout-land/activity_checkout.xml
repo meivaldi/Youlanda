@@ -9,8 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white">
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -19,7 +18,8 @@
             <RelativeLayout
                 android:id="@+id/left_sidebar"
                 android:layout_width="350dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@drawable/background_white">
 
                 <android.support.design.widget.AppBarLayout
                     android:id="@+id/appbar"
@@ -43,7 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:layout_below="@id/appbar"
-                    android:background="@android:color/white"
+                    android:background="@drawable/background_white"
                     android:orientation="vertical">
 
                     <TextView
@@ -221,27 +221,28 @@
                 android:id="@+id/right_sidebar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_toRightOf="@id/left_sidebar">
+                android:layout_toRightOf="@id/left_sidebar"
+                android:background="@color/colorPrimary">
 
-                <RelativeLayout
-                    android:id="@+id/checkout_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimary">
-
-                    <TextView
-                        android:layout_centerVertical="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="10dp"
-                        android:text="Pembayaran"
-                        android:textColor="@android:color/white"
-                        android:textSize="24dp" />
-
-                </RelativeLayout>
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Pembayaran"
+                    android:textColor="@android:color/white"
+                    android:textSize="24dp" />
 
             </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/center"
+                android:background="@drawable/background_white"
+                android:layout_toRightOf="@id/left_sidebar"
+                android:layout_below="@id/right_sidebar"
+                android:layout_width="450dp"
+                android:layout_height="match_parent"></RelativeLayout>
 
         </RelativeLayout>
 

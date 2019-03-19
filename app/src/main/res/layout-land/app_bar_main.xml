@@ -105,10 +105,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:drawableLeft="@drawable/baseline_person_black_24"
+                        android:drawableLeft="@drawable/baseline_person_black_18"
+                        android:drawablePadding="10dp"
                         android:text="Kasir"
                         android:textColor="@android:color/black"
-                        android:textSize="24dp"
+                        android:textSize="18dp"
                         android:textStyle="bold" />
 
 
@@ -117,10 +118,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:drawableLeft="@drawable/baseline_shopping_cart_black_24"
+                        android:drawableLeft="@drawable/baseline_shopping_cart_black_18"
                         android:text="@{DataBindingUtils.count(order.cartSum)}"
                         android:textColor="@android:color/black"
-                        android:textSize="24dp"
+                        android:textSize="18dp"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
