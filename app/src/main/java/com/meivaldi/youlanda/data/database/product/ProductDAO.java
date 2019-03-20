@@ -15,6 +15,9 @@ public interface ProductDAO {
     @Insert
     void insertAllProducts(List<Product> productList);
 
+    @Update
+    void updateAllProducts(List<Product> productList);
+
     @Insert
     void insertProduct(Product product);
 
