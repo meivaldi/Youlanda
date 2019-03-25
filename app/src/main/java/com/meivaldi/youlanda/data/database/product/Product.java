@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import com.meivaldi.youlanda.BR;
@@ -19,24 +20,32 @@ import com.meivaldi.youlanda.BR;
 public class Product extends BaseObservable {
 
     @PrimaryKey(autoGenerate = true)
+    @SerializedName("id")
+    @Expose
     private int id;
 
     @SerializedName("nama_produk")
+    @Expose
     private String nama;
 
     @SerializedName("foto_produk")
+    @Expose
     private String foto;
 
     @SerializedName("harga_produk")
+    @Expose
     private String harga;
 
     @SerializedName("jenis")
+    @Expose
     private String jenis;
 
     @SerializedName("stok")
+    @Expose
     private String stok;
 
     @SerializedName("diskon")
+    @Expose
     private String diskon;
 
     private boolean selected;
