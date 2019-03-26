@@ -1,7 +1,5 @@
 package com.meivaldi.youlanda.ui;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
@@ -11,20 +9,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
@@ -40,13 +35,15 @@ import com.meivaldi.youlanda.utilities.InjectorUtils;
 import com.meivaldi.youlanda.utilities.MyClickHandler;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         AllProductFragment.AllProductFragmentListener,
         BreadFragment.BreadFragmentListener,
         TartFragment.TartFragmentListener,
-        SpongeFragment.SpongeFragmentListener {
+        SpongeFragment.SpongeFragmentListener,
+        Runnable {
 
     private RecyclerView cart;
     private CartAdapter cartAdapter;
@@ -98,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cart.setHasFixedSize(true);
 
         cartList = new ArrayList<>();
-        order = new Order(cartList);
+        order = new Order(cartList, new Date());
 
         cartAdapter = new CartAdapter(getApplicationContext(), cartList, order);
         cart.setAdapter(cartAdapter);
@@ -118,6 +115,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         handler = new MyClickHandler(this);
         binding.setHandlers(handler);
+
+        ProductRepository repository = InjectorUtils.provideRepository(getApplicationContext());
+        Date date = repository.getNormalizedUtcDateForToday();
+
+        Log.d("TANGGAL", date.toString());
+
+        Thread thread = new Thread(this);
+        thread.start();
 
         binding.setOrder(order);
     }
@@ -283,5 +288,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         return true;
+    }
+
+    @Override
+    public void run() {
+        int hours, minutes, seconds;
+
+        Date date = new Date();
+        hours = date.getHours();
+        minutes = date.getMinutes();
+        seconds = date.getSeconds();
+
+        while (true) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            seconds++;
+
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+            }
+
+            if (minutes >= 60) {
+                minutes = 0;
+                hours++;
+            }
+
+            String clock = hours + ":" + minutes + ":" + seconds;
+            order.setTime(clock);
+        }
     }
 }

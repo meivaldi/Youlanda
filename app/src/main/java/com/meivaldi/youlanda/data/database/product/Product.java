@@ -1,7 +1,9 @@
 package com.meivaldi.youlanda.data.database.product;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.PrimaryKey;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -61,7 +63,7 @@ public class Product extends BaseObservable {
         this.selected = false;
     }
 
-    @Ignore
+    /*@Ignore
     public Product(String nama, String foto, String harga, String jenis, String stok, String diskon) {
         this.nama = nama;
         this.foto = foto;
@@ -71,7 +73,7 @@ public class Product extends BaseObservable {
         this.diskon = diskon;
         this.selected = false;
     }
-
+*/
     public int getId() {
         return id;
     }

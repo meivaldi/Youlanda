@@ -1,7 +1,5 @@
 package com.meivaldi.youlanda.data.network;
 
-import android.support.design.animation.Positioning;
-
 import com.meivaldi.youlanda.data.database.product.Product;
 
 import java.util.List;
@@ -19,6 +17,6 @@ public interface GetDataService {
 
     @POST("/android/store_product.php")
     @FormUrlEncoded
-    Call<Product> saveProduct(@Field("stok") int stok);
+    Call<Product> saveProduct(@Field("stok") int stok, @Field("id") int id);
 
 }

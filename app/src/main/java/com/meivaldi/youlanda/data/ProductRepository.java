@@ -9,7 +9,10 @@ import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.data.database.product.ProductDAO;
 import com.meivaldi.youlanda.data.network.ProductNetworkDataSource;
 
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class ProductRepository {
     private static final String TAG = ProductRepository.class.getSimpleName();
@@ -22,7 +25,6 @@ public class ProductRepository {
     private final AppExecutors appExecutors;
 
     private boolean initialized = false;
-    private Product temp;
 
     public ProductRepository(ProductDAO productDAO,
                              ProductNetworkDataSource productNetworkDataSource,
@@ -74,6 +76,20 @@ public class ProductRepository {
         return true;
     }
 
+    public Date getNormalizedUtcDateForToday() {
+        long normalizedMilli = getNormalizedUtcMsForToday();
+        return new Date(normalizedMilli);
+    }
+
+    public long getNormalizedUtcMsForToday() {
+        long utcNowMillis = System.currentTimeMillis();
+        TimeZone currentTimeZone = TimeZone.getTimeZone("GMT+07:00");
+        long gmtOffsetMillis = currentTimeZone.getOffset(utcNowMillis);
+        long timeSinceEpochLocalTimeMillis = utcNowMillis + gmtOffsetMillis;
+        long daysSinceEpochLocal = TimeUnit.MILLISECONDS.toDays(timeSinceEpochLocalTimeMillis);
+        return TimeUnit.DAYS.toMillis(daysSinceEpochLocal);
+    }
+
     private void startFetchProductService() {
         productNetworkDataSource.startFetchProductService();
     }
@@ -92,17 +108,8 @@ public class ProductRepository {
         }
     }
 
-    public LiveData<List<Product>> getAllProducts() {
-        initializeData();
-        return productDAO.getAllProducts();
-    }
-
     public void updateProduct(Product product) {
         new UpdateProduct().execute(product);
-    }
-
-    public void updateAllProduct(List<Product> productList) {
-
     }
 
     private class UpdateProduct extends AsyncTask<Product, Void, Void> {
@@ -112,12 +119,4 @@ public class ProductRepository {
             return null;
         }
     }
-
-    private class UpdateAllProduct extends AsyncTask<Product, Void, Void> {
-        @Override
-        protected Void doInBackground(Product... products) {
-            return null;
-        }
-    }
-
 }

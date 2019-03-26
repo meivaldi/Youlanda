@@ -1,5 +1,8 @@
 package com.meivaldi.youlanda.utilities;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class DataBindingUtils {
 
     public static String convert(String string) {
@@ -47,6 +50,16 @@ public class DataBindingUtils {
         }
 
         return false;
+    }
+
+    public static String dateConverter(Date d) {
+        SimpleDateFormat df = new SimpleDateFormat("EEEE, dd/MMM/yyyy");
+
+        return df.format(d);
+    }
+
+    public static String getOrderNumber(int number) {
+        return "Order No #" + number;
     }
 
 }

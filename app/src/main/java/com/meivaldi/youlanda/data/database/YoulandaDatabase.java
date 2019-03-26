@@ -1,4 +1,4 @@
-package com.meivaldi.youlanda.data.database.product;
+package com.meivaldi.youlanda.data.database;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -6,21 +6,24 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.util.Log;
 
-@Database(entities = {Product.class}, version = 1)
-public abstract class ProductDatabase extends RoomDatabase {
+import com.meivaldi.youlanda.data.database.product.Product;
+import com.meivaldi.youlanda.data.database.product.ProductDAO;
 
-    private static final String TAG = ProductDatabase.class.getSimpleName();
+@Database(entities = {Product.class}, version = 1)
+public abstract class YoulandaDatabase extends RoomDatabase {
+
+    private static final String TAG = YoulandaDatabase.class.getSimpleName();
     private static final String DATABASE_NAME = "product";
 
     private static final Object LOCK = new Object();
-    private static ProductDatabase instance;
+    private static YoulandaDatabase instance;
 
-    public static ProductDatabase getInstance(Context context) {
+    public static YoulandaDatabase getInstance(Context context) {
         Log.d(TAG, "Getting database");
         if (instance == null) {
             synchronized (LOCK) {
                 instance = Room.databaseBuilder(context.getApplicationContext(),
-                        ProductDatabase.class, ProductDatabase.DATABASE_NAME).build();
+                        YoulandaDatabase.class, YoulandaDatabase.DATABASE_NAME).build();
                 Log.d(TAG, "New Database Created");
             }
         }

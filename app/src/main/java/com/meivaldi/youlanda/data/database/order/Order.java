@@ -7,19 +7,24 @@ import com.meivaldi.youlanda.BR;
 import com.meivaldi.youlanda.data.database.cart.Cart;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class Order extends BaseObservable implements Serializable {
 
+    private int id;
     private int cartSum;
     private int price;
     private int tax;
     private int total;
     private int diskon;
     private String jenis;
+    private String time;
+    private Date mDate;
     private List<Cart> cartList;
 
-    public Order(List<Cart> cartList) {
+    public Order(int id, List<Cart> cartList, Date date) {
+        this.id = id;
         this.cartSum = 0;
         this.price = 0;
         this.tax = 0;
@@ -27,6 +32,29 @@ public class Order extends BaseObservable implements Serializable {
         this.diskon = 0;
         this.cartList = cartList;
         this.jenis = "Beli Langsung";
+        mDate = date;
+    }
+
+    public Order(List<Cart> cartList, Date date) {
+        this.id = 0;
+        this.cartSum = 0;
+        this.price = 0;
+        this.tax = 0;
+        this.total = 0;
+        this.diskon = 0;
+        this.cartList = cartList;
+        this.jenis = "Beli Langsung";
+        mDate = date;
+    }
+
+    @Bindable
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+        notifyPropertyChanged(BR.id);
     }
 
     @Bindable
@@ -99,5 +127,29 @@ public class Order extends BaseObservable implements Serializable {
     public void setJenis(String jenis) {
         this.jenis = jenis;
         notifyPropertyChanged(BR.jenis);
+    }
+
+    public List<Cart> getCartList() {
+        return cartList;
+    }
+
+    @Bindable
+    public Date getDate() {
+        return mDate;
+    }
+
+    public void setDate(Date mDate) {
+        this.mDate = mDate;
+        notifyPropertyChanged(BR.date);
+    }
+
+    @Bindable
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+        notifyPropertyChanged(BR.time);
     }
 }

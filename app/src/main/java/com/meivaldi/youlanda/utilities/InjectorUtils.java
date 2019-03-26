@@ -4,14 +4,14 @@ import android.content.Context;
 
 import com.meivaldi.youlanda.AppExecutors;
 import com.meivaldi.youlanda.data.ProductRepository;
-import com.meivaldi.youlanda.data.database.product.ProductDatabase;
+import com.meivaldi.youlanda.data.database.YoulandaDatabase;
 import com.meivaldi.youlanda.data.network.ProductNetworkDataSource;
 import com.meivaldi.youlanda.ui.MainViewModelFactory;
 
 public class InjectorUtils {
 
     public static ProductRepository provideRepository(Context context) {
-        ProductDatabase database = ProductDatabase.getInstance(context.getApplicationContext());
+        YoulandaDatabase database = YoulandaDatabase.getInstance(context.getApplicationContext());
         AppExecutors executors = AppExecutors.getInstance();
         ProductNetworkDataSource networkDataSource =
                 ProductNetworkDataSource.getInstance(context, executors);
