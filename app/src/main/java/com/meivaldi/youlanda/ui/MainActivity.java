@@ -29,6 +29,7 @@ import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
 import com.meivaldi.youlanda.ui.fragment.AllProductFragment;
 import com.meivaldi.youlanda.ui.fragment.BreadFragment;
+import com.meivaldi.youlanda.ui.fragment.DonutFragment;
 import com.meivaldi.youlanda.ui.fragment.SpongeFragment;
 import com.meivaldi.youlanda.ui.fragment.TartFragment;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         BreadFragment.BreadFragmentListener,
         TartFragment.TartFragmentListener,
         SpongeFragment.SpongeFragmentListener,
+        DonutFragment.DonutFragmentListener,
         Runnable {
 
     private RecyclerView cart;
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPagerAdapter.addFrag(new BreadFragment(this), "Roti");
         viewPagerAdapter.addFrag(new TartFragment(this), "Tar");
         viewPagerAdapter.addFrag(new SpongeFragment(this), "Bolu");
+        viewPagerAdapter.addFrag(new DonutFragment(this), "Donut");
         viewPager.setAdapter(viewPagerAdapter);
 
         tabLayout.setupWithViewPager(viewPager);
@@ -284,6 +287,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    public void onDonutProductClicked(Product product) {
+        int stok = Integer.valueOf(product.getStok());
+
+        if (product.isSelected()) {
+            cartList.add(new Cart(product, 1));
+
+            stok -= 1;
+            product.setStok(String.valueOf(stok));
+        } else {
+            int index = getIndex(cartList, product.getNama());
+
+            stok += cartList.get(index).getQuantity();
+            product.setStok(String.valueOf(stok));
+
+            cartList.remove(index);
+        }
+
+        order.setCartSum(cartList.size());
+        order.setTotal();
+        order.setTax();
+        order.setDiskon();
+        order.setPrice();
+
+        cartAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
@@ -318,8 +348,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 hours++;
             }
 
-            String clock = hours + ":" + minutes + ":" + seconds;
+            String sHours="", sMinutes ="", sSeconds="";
+
+            if (hours < 10) {
+                sHours = "0" + String.valueOf(hours);
+            } else {
+                sHours = String.valueOf(hours);
+            }
+
+            if (minutes < 10) {
+                sMinutes = "0" + String.valueOf(minutes);
+            } else {
+                sMinutes = String.valueOf(minutes);
+            }
+
+            if (seconds < 10) {
+                sSeconds = "0" + String.valueOf(seconds);
+            } else {
+                sSeconds = String.valueOf(seconds);
+            }
+
+            String clock = sHours + ":" + sMinutes + ":" + sSeconds;
             order.setTime(clock);
         }
     }
+
 }
