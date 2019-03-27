@@ -1,5 +1,7 @@
 package com.meivaldi.youlanda.utilities;
 
+import com.meivaldi.youlanda.data.database.order.Order;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -60,6 +62,19 @@ public class DataBindingUtils {
 
     public static String getOrderNumber(int number) {
         return "Order No #" + number;
+    }
+
+    public static String getReturn(Order order) {
+        int price = order.getPrice();
+        int cash = order.getCash();
+
+        int change = cash - price;
+
+        return "Rp." + change + ",-";
+    }
+
+    public static String stringConverter(int quantity) {
+        return String.valueOf(quantity);
     }
 
 }
