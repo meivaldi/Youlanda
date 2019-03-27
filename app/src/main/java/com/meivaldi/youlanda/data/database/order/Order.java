@@ -18,6 +18,7 @@ public class Order extends BaseObservable implements Serializable {
     private int tax;
     private int total;
     private int diskon;
+    private int cash;
     private String jenis;
     private String time;
     private Date mDate;
@@ -32,6 +33,7 @@ public class Order extends BaseObservable implements Serializable {
         this.diskon = 0;
         this.cartList = cartList;
         this.jenis = "Beli Langsung";
+        this.cash = 0;
         mDate = date;
     }
 
@@ -44,6 +46,7 @@ public class Order extends BaseObservable implements Serializable {
         this.diskon = 0;
         this.cartList = cartList;
         this.jenis = "Beli Langsung";
+        this.cash = 0;
         mDate = date;
     }
 
@@ -151,5 +154,15 @@ public class Order extends BaseObservable implements Serializable {
     public void setTime(String time) {
         this.time = time;
         notifyPropertyChanged(BR.time);
+    }
+
+    @Bindable
+    public int getCash() {
+        return cash;
+    }
+
+    public void setCash(int cash) {
+        this.cash = cash;
+        notifyPropertyChanged(BR.cash);
     }
 }

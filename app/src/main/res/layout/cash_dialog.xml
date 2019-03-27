@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="order"
+            type="com.meivaldi.youlanda.data.database.order.Order" />
+
+        <variable
+            name="handlers"
+            type="com.meivaldi.youlanda.utilities.MyClickHandler" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Masukkan uang"
+            android:textSize="32dp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:id="@+id/cash"
+            android:layout_below="@id/label"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:inputType="number"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp" />
+
+        <Button
+            android:id="@+id/bayar"
+            android:layout_below="@id/cash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            android:text="Bayar"
+            android:textColor="@android:color/white"
+            android:onClick="@{() -> handlers.onPurchaseClicked(order)}" />
+
+    </RelativeLayout>
+</layout>

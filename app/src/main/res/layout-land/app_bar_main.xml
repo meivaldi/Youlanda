@@ -338,7 +338,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="10dp"
-                            android:onClick="@{() -> handlers.onPurchaseClicked(order)}">
+                            android:onClick="@{() -> handlers.getMoney(order)}">
 
                             <TextView
                                 android:layout_width="wrap_content"
