@@ -29,6 +29,7 @@ import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
 import com.meivaldi.youlanda.ui.fragment.AllProductFragment;
 import com.meivaldi.youlanda.ui.fragment.BreadFragment;
+import com.meivaldi.youlanda.ui.fragment.BrowniesFragment;
 import com.meivaldi.youlanda.ui.fragment.DonutFragment;
 import com.meivaldi.youlanda.ui.fragment.SpongeFragment;
 import com.meivaldi.youlanda.ui.fragment.TartFragment;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TartFragment.TartFragmentListener,
         SpongeFragment.SpongeFragmentListener,
         DonutFragment.DonutFragmentListener,
+        BrowniesFragment.BrowniesFragmentListener,
         Runnable {
 
     private RecyclerView cart;
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPagerAdapter.addFrag(new TartFragment(this), "Tar");
         viewPagerAdapter.addFrag(new SpongeFragment(this), "Bolu");
         viewPagerAdapter.addFrag(new DonutFragment(this), "Donut");
+        viewPagerAdapter.addFrag(new BrowniesFragment(this), "Brownies");
         viewPager.setAdapter(viewPagerAdapter);
 
         tabLayout.setupWithViewPager(viewPager);
@@ -288,6 +291,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onDonutProductClicked(Product product) {
+        int stok = Integer.valueOf(product.getStok());
+
+        if (product.isSelected()) {
+            cartList.add(new Cart(product, 1));
+
+            stok -= 1;
+            product.setStok(String.valueOf(stok));
+        } else {
+            int index = getIndex(cartList, product.getNama());
+
+            stok += cartList.get(index).getQuantity();
+            product.setStok(String.valueOf(stok));
+
+            cartList.remove(index);
+        }
+
+        order.setCartSum(cartList.size());
+        order.setTotal();
+        order.setTax();
+        order.setDiskon();
+        order.setPrice();
+
+        cartAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBrowniesProductClicked(Product product) {
         int stok = Integer.valueOf(product.getStok());
 
         if (product.isSelected()) {

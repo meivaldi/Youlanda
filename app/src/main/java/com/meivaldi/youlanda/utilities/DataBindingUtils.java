@@ -77,4 +77,20 @@ public class DataBindingUtils {
         return String.valueOf(quantity);
     }
 
+    public static String discountConverter(String diskon) {
+        int disc = (int) (Float.valueOf(diskon) * 100);
+
+        return disc + "%";
+    }
+
+    public static boolean getDiscount(String diskon) {
+        float disc = Float.valueOf(diskon);
+
+        if (disc <= 0.0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }

@@ -7,6 +7,8 @@
             type="com.meivaldi.youlanda.data.database.product.Product" />
 
         <import type="com.meivaldi.youlanda.utilities.DataBindingUtils" />
+
+        <import type="android.view.View" />
     </data>
 
     <RelativeLayout
@@ -26,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/imageContainer"
                     android:layout_width="180dp"
                     android:layout_height="@dimen/album_cover_height"
@@ -42,7 +44,24 @@
                         android:scaleType="fitXY"
                         android:productImage="@{product.foto}"/>
 
-                </LinearLayout>
+                    <RelativeLayout
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bottom_round"
+                        android:visibility="@{DataBindingUtils.getDiscount(product.diskon) ? View.VISIBLE : View.GONE}">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{DataBindingUtils.discountConverter(product.diskon)}"
+                            android:textSize="15dp"
+                            android:textColor="@android:color/white"
+                            android:layout_centerHorizontal="true"/>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/nama_produk"
