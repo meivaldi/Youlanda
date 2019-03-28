@@ -17,6 +17,6 @@ public interface GetDataService {
 
     @POST("/android/store_product.php")
     @FormUrlEncoded
-    Call<Product> saveProduct(@Field("stok") int stok, @Field("id") int id);
+    Call<Product> saveProduct(@Field("stok") int stok, @Field("nama") String nama);
 
 }

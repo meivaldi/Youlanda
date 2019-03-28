@@ -73,14 +73,16 @@ public class ProductRepository {
     }
 
     private boolean isFetchedNeeded() {
-        Date date = new Date();
+        /*Date date = new Date();
         int hours = date.getHours();
 
         if ((hours % 4) == 0) {
             return true;
         } else {
             return false;
-        }
+        }*/
+
+        return true;
     }
 
     public Date getNormalizedUtcDateForToday() {
