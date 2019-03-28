@@ -165,4 +165,5 @@ public class Order extends BaseObservable implements Serializable {
         this.cash = cash;
         notifyPropertyChanged(BR.cash);
     }
+
 }

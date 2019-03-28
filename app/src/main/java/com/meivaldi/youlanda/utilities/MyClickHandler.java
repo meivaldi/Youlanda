@@ -19,12 +19,16 @@ import android.widget.Toast;
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
 import com.meivaldi.youlanda.data.database.cart.Cart;
+import com.meivaldi.youlanda.data.database.discount.Discount;
 import com.meivaldi.youlanda.data.database.order.Order;
 import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.data.network.GetDataService;
 import com.meivaldi.youlanda.data.network.RetrofitClientInstance;
 import com.meivaldi.youlanda.databinding.CashoutBinding;
+import com.meivaldi.youlanda.databinding.SpecialDiskonDialogBinding;
 import com.meivaldi.youlanda.ui.CheckoutAdapter;
+import com.meivaldi.youlanda.ui.DiscountAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,44 +145,42 @@ public class MyClickHandler {
         dialog.show();
     }
 
-    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+    public void showDiscount(Order order) {
+        View view = LayoutInflater.from(context).inflate(R.layout.special_diskon_dialog, null, false);
 
-        private int spanCount;
-        private int spacing;
-        private boolean includeEdge;
+        SpecialDiskonDialogBinding binding = DataBindingUtil.bind(view);
 
-        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
-            this.spanCount = spanCount;
-            this.spacing = spacing;
-            this.includeEdge = includeEdge;
-        }
+        Dialog specialDiscount = new Dialog(context);
+        specialDiscount.setContentView(binding.getRoot());
+        specialDiscount.setCancelable(true);
 
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int position = parent.getChildAdapterPosition(view);
-            int column = position % spanCount;
+        List<Discount> discounts = new ArrayList<>();
+        DiscountAdapter adapter = new DiscountAdapter(context, discounts);
 
-            if (includeEdge) {
-                outRect.left = spacing - column * spacing / spanCount;
-                outRect.right = (column + 1) * spacing / spanCount;
-
-                if (position < spanCount) {
-                    outRect.top = spacing;
-                }
-                outRect.bottom = spacing;
-            } else {
-                outRect.left = column * spacing / spanCount;
-                outRect.right = spacing - (column + 1) * spacing / spanCount;
-                if (position >= spanCount) {
-                    outRect.top = spacing;
-                }
+        RecyclerView discountList = binding.discountList;
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context, 1);
+        discountList.setLayoutManager(mLayoutManager);
+        discountList.setItemAnimator(new DefaultItemAnimator());
+        discountList.addOnItemTouchListener(new RecyclerTouchListener(context, discountList, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Discount discount = discounts.get(position);
+                specialDiscount.dismiss();
             }
-        }
-    }
 
-    private int dpToPx(int dp) {
-        Resources r = context.getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+        discounts.add(new Discount(5));
+        discounts.add(new Discount(10));
+        discounts.add(new Discount(20));
+
+        discountList.setAdapter(adapter);
+
+        specialDiscount.show();
     }
 
 }

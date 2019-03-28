@@ -39,7 +39,7 @@
             android:name=".data.network.ProductSyncIntentService"
             android:exported="false" />
 
-        <activity android:name=".ui.CheckoutActivity"></activity>
+        <activity android:name=".ui.CheckoutActivity" />
     </application>
 
 </manifest>

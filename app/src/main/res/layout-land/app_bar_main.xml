@@ -238,6 +238,25 @@
                             android:layout_alignParentStart="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="Diskon Spesial" />
+
+                        <TextView
+                            android:layout_alignParentEnd="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="- Rp. 0,-" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_alignParentStart="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="Ppn (10%)" />
 
                         <TextView
@@ -312,7 +331,9 @@
                             android:layout_marginTop="10dp"
                             android:padding="10dp"
                             android:background="@{DataBindingUtils.isCartEmpty(order.cartSum) ? @drawable/background_button : @drawable/background_small_icon}"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:clickable="@{DataBindingUtils.isCartEmpty(order.cartSum) ? true : false}"
+                            android:onClick="@{() -> handlers.showDiscount(order)}">
 
                             <ImageView
                                 android:layout_gravity="center_horizontal"
