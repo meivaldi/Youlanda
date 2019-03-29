@@ -25,6 +25,7 @@ import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.data.network.GetDataService;
 import com.meivaldi.youlanda.data.network.RetrofitClientInstance;
 import com.meivaldi.youlanda.databinding.CashoutBinding;
+import com.meivaldi.youlanda.databinding.MoneyDigitBinding;
 import com.meivaldi.youlanda.databinding.SpecialDiskonDialogBinding;
 import com.meivaldi.youlanda.ui.CheckoutAdapter;
 import com.meivaldi.youlanda.ui.DiscountAdapter;
@@ -40,6 +41,7 @@ public class MyClickHandler {
 
     private Context context;
     private Dialog purchaseDialog;
+    private Dialog moneyDialog;
 
     public MyClickHandler(Context context) {
         this.context = context;
@@ -90,6 +92,17 @@ public class MyClickHandler {
         purchaseDialog.dismiss();
     }
 
+    public void setMoney(Order order, int cash) {
+        if (cash < order.getPrice()) {
+            Toast.makeText(context, "Uang tidak cukup", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            order.setCash(cash);
+            moneyDialog.dismiss();
+            onPurchaseClicked(order);
+        }
+    }
+
     public void onPurchaseClicked(Order order) {
         View view = LayoutInflater.from(context).inflate(R.layout.cashout, null, false);
 
@@ -118,6 +131,8 @@ public class MyClickHandler {
     }
 
     public void getMoney(Order order) {
+        moneyDialog.dismiss();
+
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.cash_dialog);
         dialog.setCancelable(true);
@@ -145,6 +160,20 @@ public class MyClickHandler {
         dialog.show();
     }
 
+    public void showCash(Order order) {
+        View view = LayoutInflater.from(context).inflate(R.layout.money_digit, null, false);
+
+        MoneyDigitBinding binding = DataBindingUtil.bind(view);
+        binding.setOrder(order);
+        binding.setHandlers(this);
+
+        moneyDialog = new Dialog(context);
+        moneyDialog.setContentView(binding.getRoot());
+        moneyDialog.setCancelable(true);
+
+        moneyDialog.show();
+    }
+
     public void showDiscount(Order order) {
         View view = LayoutInflater.from(context).inflate(R.layout.special_diskon_dialog, null, false);
 
@@ -165,6 +194,7 @@ public class MyClickHandler {
             @Override
             public void onClick(View view, int position) {
                 Discount discount = discounts.get(position);
+                order.setSpecial_discount(discount.getDiscount());
                 specialDiscount.dismiss();
             }
 

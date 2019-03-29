@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 
 import com.meivaldi.youlanda.BR;
 import com.meivaldi.youlanda.data.database.cart.Cart;
+import com.meivaldi.youlanda.data.database.discount.Discount;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +19,7 @@ public class Order extends BaseObservable implements Serializable {
     private int tax;
     private int total;
     private int diskon;
+    private Discount mSpecial_discount;
     private int cash;
     private String jenis;
     private String time;
@@ -35,6 +37,7 @@ public class Order extends BaseObservable implements Serializable {
         this.jenis = "Beli Langsung";
         this.cash = 0;
         mDate = date;
+        mSpecial_discount = new Discount(0);
     }
 
     public Order(List<Cart> cartList, Date date) {
@@ -48,6 +51,7 @@ public class Order extends BaseObservable implements Serializable {
         this.jenis = "Beli Langsung";
         this.cash = 0;
         mDate = date;
+        mSpecial_discount = new Discount(0);
     }
 
     @Bindable
@@ -76,7 +80,7 @@ public class Order extends BaseObservable implements Serializable {
     }
 
     public void setPrice() {
-        price = total + tax - diskon;
+        price = total + tax - diskon - ((mSpecial_discount.getDiscount() * total) / 100);
         notifyPropertyChanged(BR.price);
     }
 
@@ -166,4 +170,12 @@ public class Order extends BaseObservable implements Serializable {
         notifyPropertyChanged(BR.cash);
     }
 
+    public Discount getSpecial_discount() {
+        return mSpecial_discount;
+    }
+
+    public void setSpecial_discount(int discount) {
+        Discount temp = new Discount(discount);
+        mSpecial_discount = temp;
+    }
 }
