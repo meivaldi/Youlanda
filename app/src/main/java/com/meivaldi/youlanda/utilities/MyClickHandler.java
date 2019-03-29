@@ -53,7 +53,7 @@ public class MyClickHandler {
         ProductRepository repository = InjectorUtils.provideRepository(context);
         List<Product> selectedProduct = new ArrayList<>();
 
-        for (Cart cart: cartList) {
+        for (Cart cart : cartList) {
             Product product = cart.getProduct();
             product.setSelected(false);
 
@@ -71,7 +71,7 @@ public class MyClickHandler {
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         Call<Product> call;
 
-        for (int i=0; i<selectedProduct.size(); i++) {
+        for (int i = 0; i < selectedProduct.size(); i++) {
             Product selected = selectedProduct.get(i);
             Log.d("TES", selected.getStok() + " " + selected.getNama());
             call = service.saveProduct(Integer.valueOf(selected.getStok()), selected.getNama());
@@ -161,17 +161,22 @@ public class MyClickHandler {
     }
 
     public void showCash(Order order) {
-        View view = LayoutInflater.from(context).inflate(R.layout.money_digit, null, false);
+        if (order.getJenis() == "Jenis Order") {
+            Toast.makeText(context, "Silahkan pilih jenis order terlebih dahulu!", Toast.LENGTH_LONG).show();
+            return;
+        } else {
+            View view = LayoutInflater.from(context).inflate(R.layout.money_digit, null, false);
 
-        MoneyDigitBinding binding = DataBindingUtil.bind(view);
-        binding.setOrder(order);
-        binding.setHandlers(this);
+            MoneyDigitBinding binding = DataBindingUtil.bind(view);
+            binding.setOrder(order);
+            binding.setHandlers(this);
 
-        moneyDialog = new Dialog(context);
-        moneyDialog.setContentView(binding.getRoot());
-        moneyDialog.setCancelable(true);
+            moneyDialog = new Dialog(context);
+            moneyDialog.setContentView(binding.getRoot());
+            moneyDialog.setCancelable(true);
 
-        moneyDialog.show();
+            moneyDialog.show();
+        }
     }
 
     public void showDiscount(Order order) {
@@ -194,7 +199,8 @@ public class MyClickHandler {
             @Override
             public void onClick(View view, int position) {
                 Discount discount = discounts.get(position);
-                order.setSpecial_discount(discount.getDiscount());
+                order.setDiscount(new Discount(discount.getDiscount()));
+                order.setSpecial_discount();
                 order.setPrice();
                 specialDiscount.dismiss();
             }

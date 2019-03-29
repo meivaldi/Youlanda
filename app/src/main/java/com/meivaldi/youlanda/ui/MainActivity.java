@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.meivaldi.youlanda.R;
@@ -116,6 +117,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, R.layout.custom_spinner, jenisOrder);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String jenis = jenisOrder.get(position);
+                order.setJenis(jenis);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         String jenis = spinner.getSelectedItem().toString();
         order.setJenis(jenis);
@@ -150,12 +163,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.bread) {
-            loadFragment(new BreadFragment(this));
-        } else if (id == R.id.tart) {
-            loadFragment(new TartFragment(this));
-        } else if (id == R.id.sponge) {
-            loadFragment(new SpongeFragment(this));
+        if (id == R.id.pelayan) {
+
         }
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -204,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setTotal();
         order.setTax();
         order.setDiskon();
+        order.setSpecial_discount();
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
@@ -231,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setTotal();
         order.setTax();
         order.setDiskon();
+        order.setSpecial_discount();
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
@@ -258,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setTotal();
         order.setTax();
         order.setDiskon();
+        order.setSpecial_discount();
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
@@ -285,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setTotal();
         order.setTax();
         order.setDiskon();
+        order.setSpecial_discount();
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
@@ -312,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setTotal();
         order.setTax();
         order.setDiskon();
+        order.setSpecial_discount();
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
@@ -339,6 +353,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setTotal();
         order.setTax();
         order.setDiskon();
+        order.setSpecial_discount();
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();

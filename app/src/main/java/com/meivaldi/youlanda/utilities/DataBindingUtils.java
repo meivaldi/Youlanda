@@ -93,4 +93,12 @@ public class DataBindingUtils {
         }
     }
 
+    public static String getCashier(String nama) {
+        return "Kasir: " + nama;
+    }
+
+    public static String getWaiter(String nama) {
+        return "Pelayan: " + nama;
+    }
+
 }

@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 
 import com.meivaldi.youlanda.BR;
 import com.meivaldi.youlanda.data.database.cart.Cart;
+import com.meivaldi.youlanda.data.database.discount.Discount;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,7 +23,10 @@ public class Order extends BaseObservable implements Serializable {
     private int special_discount;
     private String jenis;
     private String time;
+    private String cashier;
+    private String waiter;
     private Date mDate;
+    private Discount discount;
     private List<Cart> cartList;
 
     public Order(int id, List<Cart> cartList, Date date) {
@@ -34,13 +38,16 @@ public class Order extends BaseObservable implements Serializable {
         this.diskon = 0;
         this.special_discount = 0;
         this.cartList = cartList;
-        this.jenis = "Beli Langsung";
+        this.jenis = "";
         this.cash = 0;
+        this.cashier = "Herjunot";
+        this.waiter = "";
+        this.discount = new Discount(0);
         mDate = date;
     }
 
     public Order(List<Cart> cartList, Date date) {
-        this.id = 0;
+        this.id = 1;
         this.cartSum = 0;
         this.price = 0;
         this.tax = 0;
@@ -48,8 +55,11 @@ public class Order extends BaseObservable implements Serializable {
         this.diskon = 0;
         this.special_discount = 0;
         this.cartList = cartList;
-        this.jenis = "Beli Langsung";
+        this.jenis = "";
+        this.cashier = "Herjunot";
+        this.waiter = "";
         this.cash = 0;
+        this.discount = new Discount(0);
         mDate = date;
     }
 
@@ -174,10 +184,40 @@ public class Order extends BaseObservable implements Serializable {
         return special_discount;
     }
 
-    public void setSpecial_discount(int discount) {
-        int temp = (total * discount) / 100;
+    public void setSpecial_discount() {
+        int temp = (total * discount.getDiscount()) / 100;
 
         special_discount = temp;
         notifyPropertyChanged(BR.special_discount);
+    }
+
+    @Bindable
+    public String getCashier() {
+        return cashier;
+    }
+
+    public void setCashier(String cashier) {
+        this.cashier = cashier;
+        notifyPropertyChanged(BR.cashier);
+    }
+
+    @Bindable
+    public String getWaiter() {
+        return waiter;
+    }
+
+    public void setWaiter(String waiter) {
+        this.waiter = waiter;
+        notifyPropertyChanged(BR.waiter);
+    }
+
+    @Bindable
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
+        notifyPropertyChanged(BR.discount);
     }
 }
