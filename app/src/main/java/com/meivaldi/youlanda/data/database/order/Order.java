@@ -5,7 +5,6 @@ import android.databinding.Bindable;
 
 import com.meivaldi.youlanda.BR;
 import com.meivaldi.youlanda.data.database.cart.Cart;
-import com.meivaldi.youlanda.data.database.discount.Discount;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,8 +18,8 @@ public class Order extends BaseObservable implements Serializable {
     private int tax;
     private int total;
     private int diskon;
-    private Discount mSpecial_discount;
     private int cash;
+    private int special_discount;
     private String jenis;
     private String time;
     private Date mDate;
@@ -33,11 +32,11 @@ public class Order extends BaseObservable implements Serializable {
         this.tax = 0;
         this.total = 0;
         this.diskon = 0;
+        this.special_discount = 0;
         this.cartList = cartList;
         this.jenis = "Beli Langsung";
         this.cash = 0;
         mDate = date;
-        mSpecial_discount = new Discount(0);
     }
 
     public Order(List<Cart> cartList, Date date) {
@@ -47,11 +46,11 @@ public class Order extends BaseObservable implements Serializable {
         this.tax = 0;
         this.total = 0;
         this.diskon = 0;
+        this.special_discount = 0;
         this.cartList = cartList;
         this.jenis = "Beli Langsung";
         this.cash = 0;
         mDate = date;
-        mSpecial_discount = new Discount(0);
     }
 
     @Bindable
@@ -80,7 +79,7 @@ public class Order extends BaseObservable implements Serializable {
     }
 
     public void setPrice() {
-        price = total + tax - diskon - ((mSpecial_discount.getDiscount() * total) / 100);
+        price = total + tax - diskon - special_discount;
         notifyPropertyChanged(BR.price);
     }
 
@@ -170,12 +169,15 @@ public class Order extends BaseObservable implements Serializable {
         notifyPropertyChanged(BR.cash);
     }
 
-    public Discount getSpecial_discount() {
-        return mSpecial_discount;
+    @Bindable
+    public int getSpecial_discount() {
+        return special_discount;
     }
 
     public void setSpecial_discount(int discount) {
-        Discount temp = new Discount(discount);
-        mSpecial_discount = temp;
+        int temp = (total * discount) / 100;
+
+        special_discount = temp;
+        notifyPropertyChanged(BR.special_discount);
     }
 }

@@ -195,6 +195,7 @@ public class MyClickHandler {
             public void onClick(View view, int position) {
                 Discount discount = discounts.get(position);
                 order.setSpecial_discount(discount.getDiscount());
+                order.setPrice();
                 specialDiscount.dismiss();
             }
 
