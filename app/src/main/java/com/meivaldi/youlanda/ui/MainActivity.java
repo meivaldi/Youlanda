@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
 import com.meivaldi.youlanda.data.database.cart.Cart;
+import com.meivaldi.youlanda.data.database.discount.Discount;
 import com.meivaldi.youlanda.data.database.order.Order;
 import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
@@ -214,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setTax();
         order.setDiskon();
         order.setSpecial_discount();
+        order.setDiscount(new Discount(0));
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
@@ -242,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setTax();
         order.setDiskon();
         order.setSpecial_discount();
+        order.setDiscount(new Discount(0));
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
@@ -270,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setTax();
         order.setDiskon();
         order.setSpecial_discount();
+        order.setDiscount(new Discount(0));
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
@@ -298,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setTax();
         order.setDiskon();
         order.setSpecial_discount();
+        order.setDiscount(new Discount(0));
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
@@ -326,6 +331,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setTax();
         order.setDiskon();
         order.setSpecial_discount();
+        order.setDiscount(new Discount(0));
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
@@ -354,6 +360,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setTax();
         order.setDiskon();
         order.setSpecial_discount();
+        order.setDiscount(new Discount(0));
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();

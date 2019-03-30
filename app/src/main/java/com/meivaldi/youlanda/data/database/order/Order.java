@@ -1,8 +1,10 @@
 package com.meivaldi.youlanda.data.database.order;
 
+import android.arch.persistence.room.Entity;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
+import com.google.gson.annotations.SerializedName;
 import com.meivaldi.youlanda.BR;
 import com.meivaldi.youlanda.data.database.cart.Cart;
 import com.meivaldi.youlanda.data.database.discount.Discount;
@@ -13,18 +15,30 @@ import java.util.List;
 
 public class Order extends BaseObservable implements Serializable {
 
+    @SerializedName("id")
     private int id;
-    private int cartSum;
-    private int price;
-    private int tax;
-    private int total;
-    private int diskon;
-    private int cash;
-    private int special_discount;
-    private String jenis;
-    private String time;
+    @SerializedName("id_kasir")
     private String cashier;
+    @SerializedName("id_pelayan")
     private String waiter;
+    @SerializedName("waktu")
+    private String time;
+    @SerializedName("jenis")
+    private String jenis;
+    @SerializedName("sub_total")
+    private int total;
+    @SerializedName("diskon_produk")
+    private int diskon;
+    @SerializedName("diskon_spesial")
+    private int special_discount;
+    @SerializedName("pajak")
+    private int tax;
+    @SerializedName("total_tagihan")
+    private int price;
+    @SerializedName("uang_tunai")
+    private int cash;
+
+    private int cartSum;
     private Date mDate;
     private Discount discount;
     private List<Cart> cartList;

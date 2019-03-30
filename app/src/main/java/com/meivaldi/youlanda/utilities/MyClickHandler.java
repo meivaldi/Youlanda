@@ -61,15 +61,33 @@ public class MyClickHandler {
             selectedProduct.add(product);
         }
 
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        Call<Product> call;
+
+        Call<Order> save = service.saveOrder(order.getId(), order.getCashier(), order.getWaiter(), order.getTime(), order.getJenis(),
+                order.getTotal(), order.getDiskon(), order.getSpecial_discount(), order.getTax(), order.getPrice(),
+                order.getCash());
+        save.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                Toast.makeText(context, "Berhasil menyimpan transaksi", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                Toast.makeText(context, "Gagal menyimpan transaksi", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         order.getCartList().clear();
         order.setCartSum(0);
         order.setDiskon();
+        order.setDiscount(new Discount(0));
+        order.setSpecial_discount();
         order.setTotal();
         order.setTax();
         order.setPrice();
-
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-        Call<Product> call;
+        order.setId(order.getId() + 1);
 
         for (int i = 0; i < selectedProduct.size(); i++) {
             Product selected = selectedProduct.get(i);
@@ -79,12 +97,12 @@ public class MyClickHandler {
             call.enqueue(new Callback<Product>() {
                 @Override
                 public void onResponse(Call<Product> call, Response<Product> response) {
-                    Toast.makeText(context, "Berhasil", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Berhasil", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onFailure(Call<Product> call, Throwable t) {
-                    Toast.makeText(context, "Gagal", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Gagal", Toast.LENGTH_SHORT).show();
                 }
             });
         }
