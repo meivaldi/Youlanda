@@ -1,6 +1,6 @@
 package com.meivaldi.youlanda.data.database.order;
 
-import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
@@ -10,6 +10,7 @@ import com.meivaldi.youlanda.data.database.cart.Cart;
 import com.meivaldi.youlanda.data.database.discount.Discount;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -38,9 +39,13 @@ public class Order extends BaseObservable implements Serializable {
     @SerializedName("uang_tunai")
     private int cash;
 
+    @Ignore
     private int cartSum;
+    @Ignore
     private Date mDate;
+    @Ignore
     private Discount discount;
+    @Ignore
     private List<Cart> cartList;
 
     public Order(int id, List<Cart> cartList, Date date) {
@@ -60,6 +65,7 @@ public class Order extends BaseObservable implements Serializable {
         mDate = date;
     }
 
+    @Ignore
     public Order(List<Cart> cartList, Date date) {
         this.id = 1;
         this.cartSum = 0;
@@ -179,7 +185,9 @@ public class Order extends BaseObservable implements Serializable {
     }
 
     public void setTime(String time) {
-        this.time = time;
+        SimpleDateFormat df = new SimpleDateFormat("EEEE, dd/MMM/yyyy");
+
+        this.time = df.format(mDate) + " " + time;
         notifyPropertyChanged(BR.time);
     }
 

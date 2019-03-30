@@ -169,11 +169,11 @@
                             android:layout_marginLeft="10dp"
                             android:text="@{order.time}" />
 
-                        <TextView
+                       <!-- <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toLeftOf="@id/time"
-                            android:text="@{DataBindingUtils.dateConverter(order.date)}" />
+                            android:text="@{DataBindingUtils.dateConverter(order.date)}" />-->
 
                     </RelativeLayout>
 
