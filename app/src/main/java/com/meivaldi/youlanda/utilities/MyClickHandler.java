@@ -87,6 +87,7 @@ public class MyClickHandler {
         order.setTotal();
         order.setTax();
         order.setPrice();
+        order.setWaiter("");
         order.setId(order.getId() + 1);
 
         for (int i = 0; i < selectedProduct.size(); i++) {
@@ -181,6 +182,9 @@ public class MyClickHandler {
     public void showCash(Order order) {
         if (order.getJenis() == "Jenis Order") {
             Toast.makeText(context, "Silahkan pilih jenis order terlebih dahulu!", Toast.LENGTH_LONG).show();
+            return;
+        } else if (order.getWaiter() == "") {
+            Toast.makeText(context, "Silahkan pilih pelayan terlebih dahulu!", Toast.LENGTH_LONG).show();
             return;
         } else {
             View view = LayoutInflater.from(context).inflate(R.layout.money_digit, null, false);

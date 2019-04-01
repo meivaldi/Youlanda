@@ -1,5 +1,6 @@
 package com.meivaldi.youlanda.ui;
 
+import android.app.Dialog;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
@@ -13,6 +14,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,13 +25,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
 import com.meivaldi.youlanda.data.database.cart.Cart;
 import com.meivaldi.youlanda.data.database.discount.Discount;
+import com.meivaldi.youlanda.data.database.karyawan.Karyawan;
 import com.meivaldi.youlanda.data.database.order.Order;
 import com.meivaldi.youlanda.data.database.product.Product;
+import com.meivaldi.youlanda.data.network.GetDataService;
+import com.meivaldi.youlanda.data.network.RetrofitClientInstance;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
 import com.meivaldi.youlanda.ui.fragment.AllProductFragment;
 import com.meivaldi.youlanda.ui.fragment.BreadFragment;
@@ -38,10 +45,15 @@ import com.meivaldi.youlanda.ui.fragment.SpongeFragment;
 import com.meivaldi.youlanda.ui.fragment.TartFragment;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 import com.meivaldi.youlanda.utilities.MyClickHandler;
+import com.meivaldi.youlanda.utilities.RecyclerTouchListener;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         AllProductFragment.AllProductFragmentListener,
@@ -55,12 +67,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView cart;
     private CartAdapter cartAdapter;
     private List<Cart> cartList;
+    private List<Karyawan> employeeList;
     private Order order;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ActivityMainBinding binding;
     private AppCompatSpinner spinner;
     private MyClickHandler handler;
+    private Dialog karyawanDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +145,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        employeeList = new ArrayList<>();
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        Call<List<Karyawan>> call = service.getAllKaryawan();
+
+        call.enqueue(new Callback<List<Karyawan>>() {
+            @Override
+            public void onResponse(Call<List<Karyawan>> call, Response<List<Karyawan>> response) {
+                employeeList = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<List<Karyawan>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Gagal mengambil data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         String jenis = spinner.getSelectedItem().toString();
         order.setJenis(jenis);
 
@@ -165,7 +195,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.pelayan) {
+            karyawanDialog = new Dialog(this);
+            karyawanDialog.setContentView(R.layout.daftar_karyawan);
+            karyawanDialog.setCancelable(false);
 
+            RecyclerView daftarKaryawan = karyawanDialog.findViewById(R.id.recycler_view);
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 1);
+            daftarKaryawan.setLayoutManager(mLayoutManager);
+            daftarKaryawan.setItemAnimator(new DefaultItemAnimator());
+            daftarKaryawan.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), daftarKaryawan, new RecyclerTouchListener.ClickListener() {
+                @Override
+                public void onClick(View view, int position) {
+                    order.setWaiter(employeeList.get(position).getNama());
+                    karyawanDialog.dismiss();
+                }
+
+                @Override
+                public void onLongClick(View view, int position) {
+                    order.setWaiter(employeeList.get(position).getNama());
+                    karyawanDialog.dismiss();
+                }
+            }));
+
+            KaryawanAdapter adapter = new KaryawanAdapter(getApplicationContext(), employeeList);
+            daftarKaryawan.setAdapter(adapter);
+
+            karyawanDialog.show();
         }
 
         DrawerLayout drawer = binding.drawerLayout;
