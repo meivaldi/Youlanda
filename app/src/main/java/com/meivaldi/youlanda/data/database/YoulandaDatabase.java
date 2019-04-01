@@ -6,14 +6,16 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.util.Log;
 
+import com.meivaldi.youlanda.data.database.karyawan.Karyawan;
+import com.meivaldi.youlanda.data.database.karyawan.KaryawanDAO;
 import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.data.database.product.ProductDAO;
 
-@Database(entities = {Product.class}, version = 1)
+@Database(entities = {Product.class, Karyawan.class}, version = 1)
 public abstract class YoulandaDatabase extends RoomDatabase {
 
     private static final String TAG = YoulandaDatabase.class.getSimpleName();
-    private static final String DATABASE_NAME = "product";
+    private static final String DATABASE_NAME = "db_youlanda";
 
     private static final Object LOCK = new Object();
     private static YoulandaDatabase instance;
@@ -32,4 +34,5 @@ public abstract class YoulandaDatabase extends RoomDatabase {
     }
 
     public abstract ProductDAO productDAO();
+    public abstract KaryawanDAO karyawanDAO();
 }

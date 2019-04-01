@@ -1,5 +1,6 @@
 package com.meivaldi.youlanda.data.network;
 
+import com.meivaldi.youlanda.data.database.karyawan.Karyawan;
 import com.meivaldi.youlanda.data.database.order.Order;
 import com.meivaldi.youlanda.data.database.product.Product;
 
@@ -28,5 +29,8 @@ public interface GetDataService {
                           @Field("diskon_produk") int diskon, @Field("diskon_spesial") int diskon_spesial,
                           @Field("pajak") int pajak, @Field("total_tagihan") int tagihan,
                           @Field("uang_tunai") int cash);
+
+    @POST("/android/get_karyawan.php")
+    Call<List<Karyawan>> getAllKaryawan();
 
 }
