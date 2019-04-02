@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:singleLine="true"
-            android:hint="ID Karyawan"
+            android:hint="username"
             android:maxLines="1" />
 
         <EditText

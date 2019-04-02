@@ -101,9 +101,9 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (!error) {
                         session.setLogin(true);
-                        int id = Integer.valueOf(jObj.getString("id_karyawan"));
-                        String nama = jObj.getString("nama_karyawan");
-                        Karyawan karyawan = new Karyawan(id, nama);
+                        String nik = jObj.getString("nik");
+                        String nama = jObj.getString("nama");
+                        Karyawan karyawan = new Karyawan(nik, nama);
 
                         ProductRepository repository = InjectorUtils.provideRepository(getApplicationContext());
                         repository.insertKaryawan(karyawan);
@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("id_karyawan", username);
+                params.put("username", username);
                 params.put("password", password);
 
                 return params;

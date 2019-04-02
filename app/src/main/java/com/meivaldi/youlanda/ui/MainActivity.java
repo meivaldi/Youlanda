@@ -38,6 +38,7 @@ import com.meivaldi.youlanda.data.database.karyawan.Karyawan;
 import com.meivaldi.youlanda.data.database.order.Order;
 import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.data.network.GetDataService;
+import com.meivaldi.youlanda.data.network.OrderNumber;
 import com.meivaldi.youlanda.data.network.RetrofitClientInstance;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
 import com.meivaldi.youlanda.ui.fragment.AllProductFragment;
@@ -196,6 +197,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onFailure(Call<List<Karyawan>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Gagal mengambil data", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Call<OrderNumber> number = service.getOrderNumber();
+        number.enqueue(new Callback<OrderNumber>() {
+            @Override
+            public void onResponse(Call<OrderNumber> call, Response<OrderNumber> response) {
+                int order_number = response.body().getId();
+                order.setId(order_number+1);
+            }
+
+            @Override
+            public void onFailure(Call<OrderNumber> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
             }
         });
 

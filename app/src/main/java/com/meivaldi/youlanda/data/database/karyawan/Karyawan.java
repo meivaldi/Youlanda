@@ -18,16 +18,21 @@ public class Karyawan extends BaseObservable implements Serializable {
     @SerializedName("id")
     int id;
 
+    @SerializedName("nik")
+    String nik;
+
     @SerializedName("nama")
     String nama;
 
-    public Karyawan(int id, String nama) {
+    public Karyawan(int id, String nik, String nama) {
         this.id = id;
+        this.nik = nik;
         this.nama = nama;
     }
 
     @Ignore
-    public Karyawan(String nama) {
+    public Karyawan(String nik, String nama) {
+        this.nik = nik;
         this.nama = nama;
     }
 
@@ -49,5 +54,15 @@ public class Karyawan extends BaseObservable implements Serializable {
     public void setNama(String nama) {
         this.nama = nama;
         notifyPropertyChanged(BR.nama);
+    }
+
+    @Bindable
+    public String getNik() {
+        return nik;
+    }
+
+    public void setNik(String nik) {
+        this.nik = nik;
+        notifyPropertyChanged(BR.nik);
     }
 }
