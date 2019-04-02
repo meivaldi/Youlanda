@@ -9,8 +9,10 @@ import android.databinding.Bindable;
 import com.google.gson.annotations.SerializedName;
 import com.meivaldi.youlanda.BR;
 
+import java.io.Serializable;
+
 @Entity(tableName = "karyawan")
-public class Karyawan extends BaseObservable {
+public class Karyawan extends BaseObservable implements Serializable {
 
     @PrimaryKey
     @SerializedName("id")

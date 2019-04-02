@@ -1,6 +1,7 @@
 package com.meivaldi.youlanda.ui;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
@@ -25,6 +26,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.meivaldi.youlanda.R;
@@ -46,6 +49,7 @@ import com.meivaldi.youlanda.ui.fragment.TartFragment;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 import com.meivaldi.youlanda.utilities.MyClickHandler;
 import com.meivaldi.youlanda.utilities.RecyclerTouchListener;
+import com.meivaldi.youlanda.utilities.SessionManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,11 +79,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AppCompatSpinner spinner;
     private MyClickHandler handler;
     private Dialog karyawanDialog;
+    private SessionManager session;
+    private ProductRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        session = new SessionManager(getApplicationContext());
+
+        if (!session.isLoggedIn()) {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        }
+
+        boolean isInitialized = getSharedPreferences(session.PREF_NAME, session.PRIVATE_MODE).getBoolean(session.KEY_IS_INITIALIZED, false);
+
+        if (!isInitialized) {
+            Dialog dialog = new Dialog(MainActivity.this);
+            dialog.setContentView(R.layout.modal_awal);
+            dialog.setCancelable(false);
+
+            EditText modalET = dialog.findViewById(R.id.modal);
+            Button button = dialog.findViewById(R.id.confirm);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int modal = Integer.valueOf(modalET.getText().toString());
+                    order.setStarter(modal);
+                    session.setInitialized(true);
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        }
 
         Toolbar toolbar = binding.content.toolbar;
         setSupportActionBar(toolbar);
@@ -119,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         cartList = new ArrayList<>();
         order = new Order(cartList, new Date());
+
+        repository = InjectorUtils.provideRepository(getApplicationContext());
 
         cartAdapter = new CartAdapter(getApplicationContext(), cartList, order);
         cart.setAdapter(cartAdapter);
@@ -163,11 +201,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String jenis = spinner.getSelectedItem().toString();
         order.setJenis(jenis);
+        order.setCashier(repository.getKaryawan().getNama());
 
         handler = new MyClickHandler(this);
         binding.setHandlers(handler);
 
-        ProductRepository repository = InjectorUtils.provideRepository(getApplicationContext());
         Date date = repository.getNormalizedUtcDateForToday();
 
         Log.d("TANGGAL", date.toString());
@@ -419,6 +457,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setPrice();
 
         cartAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.logout) {
+            logoutUser(repository.getKaryawan());
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void logoutUser(Karyawan karyawan) {
+        repository.deleteKaryawan(karyawan);
+        session.setLogin(false);
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        finish();
     }
 
     @Override

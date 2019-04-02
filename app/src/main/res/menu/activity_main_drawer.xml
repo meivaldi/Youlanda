@@ -6,4 +6,13 @@
         android:icon="@drawable/baseline_person_black_24"
         android:title="Pelayan" />
 
+    <item android:title="Lainnya" >
+        <menu>
+            <item
+                android:id="@+id/tutup"
+                android:icon="@drawable/baseline_arrow_back_black_24"
+                android:title="Tutup Kasir"/>
+        </menu>
+    </item>
+
 </menu>

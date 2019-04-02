@@ -79,6 +79,9 @@ public class MyClickHandler {
             }
         });
 
+        int starter = order.getStarter();
+        order.setStarter(starter + order.getPrice());
+
         order.getCartList().clear();
         order.setCartSum(0);
         order.setDiskon();
@@ -89,6 +92,8 @@ public class MyClickHandler {
         order.setPrice();
         order.setWaiter("");
         order.setId(order.getId() + 1);
+
+        Toast.makeText(context, String.valueOf(order.getStarter()), Toast.LENGTH_SHORT).show();
 
         for (int i = 0; i < selectedProduct.size(); i++) {
             Product selected = selectedProduct.get(i);

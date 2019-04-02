@@ -16,7 +16,7 @@ public class InjectorUtils {
         ProductNetworkDataSource networkDataSource =
                 ProductNetworkDataSource.getInstance(context, executors);
 
-        return ProductRepository.getInstance(database.productDAO(), networkDataSource, executors);
+        return ProductRepository.getInstance(database.productDAO(),database.karyawanDAO(), networkDataSource, executors);
     }
 
     public static ProductNetworkDataSource provideNetworkDataSource(Context context) {

@@ -33,4 +33,8 @@ public interface GetDataService {
     @POST("/android/get_karyawan.php")
     Call<List<Karyawan>> getAllKaryawan();
 
+    @POST("/android/login.php")
+    @FormUrlEncoded
+    Call<Karyawan> getKaryawan(@Field("id_karyawan") int id, @Field("password") String password);
+
 }

@@ -42,7 +42,7 @@
                     android:layout_height="?attr/actionBarSize"
                     android:theme="@style/Toolbar"
                     android:titleTextColor="@android:color/white"
-                    app:subtitleTextColor="@android:color/white"
+                    app:subtitleTextColor="@android:color/black"
                     app:titleTextColor="@android:color/white">
 
                     <ImageView

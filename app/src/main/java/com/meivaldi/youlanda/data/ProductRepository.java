@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.meivaldi.youlanda.AppExecutors;
+import com.meivaldi.youlanda.data.database.karyawan.Karyawan;
+import com.meivaldi.youlanda.data.database.karyawan.KaryawanDAO;
 import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.data.database.product.ProductDAO;
 import com.meivaldi.youlanda.data.network.ProductNetworkDataSource;
@@ -12,6 +14,7 @@ import com.meivaldi.youlanda.data.network.ProductNetworkDataSource;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class ProductRepository {
@@ -21,15 +24,18 @@ public class ProductRepository {
     private static ProductRepository instance;
 
     private final ProductDAO productDAO;
+    private final KaryawanDAO karyawanDAO;
     private final ProductNetworkDataSource productNetworkDataSource;
     private final AppExecutors appExecutors;
 
     private boolean initialized = false;
 
     public ProductRepository(ProductDAO productDAO,
+                             KaryawanDAO karyawanDAO,
                              ProductNetworkDataSource productNetworkDataSource,
                              AppExecutors appExecutors) {
         this.productDAO = productDAO;
+        this.karyawanDAO = karyawanDAO;
         this.productNetworkDataSource = productNetworkDataSource;
         this.appExecutors = appExecutors;
 
@@ -46,12 +52,12 @@ public class ProductRepository {
     }
 
     public static synchronized ProductRepository getInstance(
-            ProductDAO productDAO, ProductNetworkDataSource productNetworkDataSource,
+            ProductDAO productDAO, KaryawanDAO karyawanDAO, ProductNetworkDataSource productNetworkDataSource,
             AppExecutors appExecutors) {
         Log.d(TAG, "Getting repository");
         if (instance == null) {
             synchronized (LOCK) {
-                instance = new ProductRepository(productDAO, productNetworkDataSource, appExecutors);
+                instance = new ProductRepository(productDAO, karyawanDAO, productNetworkDataSource, appExecutors);
                 Log.d(TAG, "New repository created");
             }
         }
@@ -128,4 +134,50 @@ public class ProductRepository {
             return null;
         }
     }
+
+    public void insertKaryawan(Karyawan karyawan) {
+        new InsertKaryawan().execute(karyawan);
+    }
+
+    public class InsertKaryawan extends AsyncTask<Karyawan, Void, Void> {
+        @Override
+        protected Void doInBackground(Karyawan... karyawans) {
+            karyawanDAO.insertKaryawan(karyawans[0]);
+            return  null;
+        }
+    }
+
+    public Karyawan getKaryawan() {
+        Karyawan karyawan = null;
+        try {
+            karyawan = new GetKaryawan().execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return karyawan;
+    }
+
+    public class GetKaryawan extends AsyncTask<Void, Void, Karyawan> {
+        @Override
+        protected Karyawan doInBackground(Void... voids) {
+            Karyawan karyawan = karyawanDAO.getKaryawan();
+            return karyawan;
+        }
+    }
+
+    public void deleteKaryawan(Karyawan karyawan) {
+        new DeleteKaryawan().execute(karyawan);
+    }
+
+    public class DeleteKaryawan extends AsyncTask<Karyawan, Void, Void> {
+        @Override
+        protected Void doInBackground(Karyawan... karyawans) {
+            karyawanDAO.deleteKaryawan(karyawans[0]);
+            return null;
+        }
+    }
+
 }
