@@ -20,7 +20,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:maxLines="1"/>
+        android:inputType="number"
+        android:maxLines="1"
+        android:singleLine="true"/>
 
     <Button
         android:id="@+id/confirm"

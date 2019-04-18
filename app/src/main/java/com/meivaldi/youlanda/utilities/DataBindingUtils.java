@@ -1,5 +1,8 @@
 package com.meivaldi.youlanda.utilities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.meivaldi.youlanda.data.database.order.Order;
 
 import java.text.SimpleDateFormat;
@@ -99,6 +102,34 @@ public class DataBindingUtils {
 
     public static String getWaiter(String nama) {
         return "Pelayan: " + nama;
+    }
+
+    public static String finalModal(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SessionManager.PREF_NAME, 0);
+        int finalModal = sharedPreferences.getInt(SessionManager.KEY_FINAL, 0);
+
+        return "Rp. " + finalModal + ",-";
+    }
+
+    public static String starterModal(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SessionManager.PREF_NAME, 0);
+        int starterModal = sharedPreferences.getInt(SessionManager.KEY_STARTER, 0);
+
+        return "Rp. " + starterModal + ",-";
+    }
+
+    public static String getProducts(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SessionManager.PREF_NAME, 0);
+        int products = sharedPreferences.getInt(SessionManager.KEY_PRODUCT, 0);
+
+        return products + " Produk";
+    }
+
+    public static String getTransactions(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SessionManager.PREF_NAME, 0);
+        int transactions = sharedPreferences.getInt(SessionManager.KEY_TRANSACTION, 0);
+
+        return transactions + " Transaksi";
     }
 
 }

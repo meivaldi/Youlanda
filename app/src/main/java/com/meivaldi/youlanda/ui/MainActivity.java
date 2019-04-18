@@ -2,6 +2,7 @@ package com.meivaldi.youlanda.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
@@ -21,6 +22,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,12 +43,14 @@ import com.meivaldi.youlanda.data.network.GetDataService;
 import com.meivaldi.youlanda.data.network.OrderNumber;
 import com.meivaldi.youlanda.data.network.RetrofitClientInstance;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
+import com.meivaldi.youlanda.databinding.TutupKasirDialogBinding;
 import com.meivaldi.youlanda.ui.fragment.AllProductFragment;
 import com.meivaldi.youlanda.ui.fragment.BreadFragment;
 import com.meivaldi.youlanda.ui.fragment.BrowniesFragment;
 import com.meivaldi.youlanda.ui.fragment.DonutFragment;
 import com.meivaldi.youlanda.ui.fragment.SpongeFragment;
 import com.meivaldi.youlanda.ui.fragment.TartFragment;
+import com.meivaldi.youlanda.utilities.CashierHandler;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 import com.meivaldi.youlanda.utilities.MyClickHandler;
 import com.meivaldi.youlanda.utilities.RecyclerTouchListener;
@@ -82,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Dialog karyawanDialog;
     private SessionManager session;
     private ProductRepository repository;
+    private Dialog tutupKasirDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onClick(View v) {
                     int modal = Integer.valueOf(modalET.getText().toString());
-                    order.setStarter(modal);
+                    session.setStarter(modal);
                     session.setInitialized(true);
                     dialog.dismiss();
                 }
@@ -274,6 +279,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             daftarKaryawan.setAdapter(adapter);
 
             karyawanDialog.show();
+        } else if (id == R.id.tutup) {
+            View view = LayoutInflater.from(getApplicationContext())
+                    .inflate(R.layout.tutup_kasir_dialog, null, false);
+
+            TutupKasirDialogBinding binding = DataBindingUtil.bind(view);
+
+            tutupKasirDialog = new Dialog(MainActivity.this);
+            tutupKasirDialog.setContentView(binding.getRoot());
+            tutupKasirDialog.setCancelable(false);
+
+            CashierHandler cashHandler = new CashierHandler(this, getApplicationContext(), tutupKasirDialog);
+            binding.setHandlers(cashHandler);
+
+            tutupKasirDialog.show();
         }
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -479,17 +498,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.logout) {
-            logoutUser(repository.getKaryawan());
+            View view = LayoutInflater.from(getApplicationContext())
+                    .inflate(R.layout.tutup_kasir_dialog, null, false);
+
+            TutupKasirDialogBinding binding = DataBindingUtil.bind(view);
+
+            tutupKasirDialog = new Dialog(MainActivity.this);
+            tutupKasirDialog.setContentView(binding.getRoot());
+            tutupKasirDialog.setCancelable(false);
+
+            CashierHandler cashHandler = new CashierHandler(this, getApplicationContext(), tutupKasirDialog);
+            binding.setHandlers(cashHandler);
+
+            tutupKasirDialog.show();
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void logoutUser(Karyawan karyawan) {
-        repository.deleteKaryawan(karyawan);
-        session.setLogin(false);
-        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-        finish();
     }
 
     @Override

@@ -47,8 +47,6 @@ public class Order extends BaseObservable implements Serializable {
     private Discount discount;
     @Ignore
     private List<Cart> cartList;
-    @Ignore
-    private int starter;
 
     public Order(int id, List<Cart> cartList, Date date) {
         this.id = id;
@@ -64,7 +62,6 @@ public class Order extends BaseObservable implements Serializable {
         this.cashier = "Herjunot";
         this.waiter = "";
         this.discount = new Discount(0);
-        this.starter = 0;
         mDate = date;
     }
 
@@ -83,7 +80,6 @@ public class Order extends BaseObservable implements Serializable {
         this.waiter = "";
         this.cash = 0;
         this.discount = new Discount(0);
-        this.starter = 0;
         mDate = date;
     }
 
@@ -245,15 +241,5 @@ public class Order extends BaseObservable implements Serializable {
     public void setDiscount(Discount discount) {
         this.discount = discount;
         notifyPropertyChanged(BR.discount);
-    }
-
-    @Bindable
-    public int getStarter() {
-        return starter;
-    }
-
-    public void setStarter(int starter) {
-        this.starter = starter;
-        notifyPropertyChanged(BR.starter);
     }
 }

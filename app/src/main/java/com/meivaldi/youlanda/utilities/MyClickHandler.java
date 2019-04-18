@@ -2,14 +2,12 @@ package com.meivaldi.youlanda.utilities;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.res.Resources;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
-import android.graphics.Rect;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -79,8 +77,20 @@ public class MyClickHandler {
             }
         });
 
-        int starter = order.getStarter();
-        order.setStarter(starter + order.getPrice());
+        changeModal(order.getPrice());
+
+        List<Cart> temp = order.getCartList();
+        int total = 0;
+
+        for (Cart cart: temp) {
+            total += cart.getQuantity();
+        }
+
+        SharedPreferences preferences = context.getSharedPreferences(SessionManager.PREF_NAME, 0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(SessionManager.KEY_PRODUCT, preferences.getInt(SessionManager.KEY_PRODUCT, 0) + total);
+        editor.putInt(SessionManager.KEY_TRANSACTION, preferences.getInt(SessionManager.KEY_TRANSACTION, 0) + 1);
+        editor.commit();
 
         order.getCartList().clear();
         order.setCartSum(0);
@@ -92,8 +102,6 @@ public class MyClickHandler {
         order.setPrice();
         order.setWaiter("");
         order.setId(order.getId() + 1);
-
-        Toast.makeText(context, String.valueOf(order.getStarter()), Toast.LENGTH_SHORT).show();
 
         for (int i = 0; i < selectedProduct.size(); i++) {
             Product selected = selectedProduct.get(i);
@@ -114,6 +122,16 @@ public class MyClickHandler {
         }
 
         purchaseDialog.dismiss();
+    }
+
+    private void changeModal(int price) {
+        SharedPreferences preferences = context.getSharedPreferences(SessionManager.PREF_NAME, 0);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        int modal = preferences.getInt(SessionManager.KEY_FINAL, 0);
+        int newValue = modal + price;
+        editor.putInt(SessionManager.KEY_FINAL, newValue);
+        editor.commit();
     }
 
     public void setMoney(Order order, int cash) {
