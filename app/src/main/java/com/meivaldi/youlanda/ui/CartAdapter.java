@@ -75,7 +75,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 order.setDiskon();
                 order.setPrice();
 
-                repository.updateProduct(product);
+                //repository.updateProduct(product);
             }
         });
 
@@ -100,7 +100,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                     order.setPrice();
                 }
 
-                repository.updateProduct(product);
+                //repository.updateProduct(product);
             }
         });
     }
