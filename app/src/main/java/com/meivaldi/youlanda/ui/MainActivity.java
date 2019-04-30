@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setJenis(jenis);
         order.setCashier(repository.getKaryawan().getNama());
 
-        handler = new MyClickHandler(this);
+        handler = new MyClickHandler(this, spinner);
         binding.setHandlers(handler);
 
         Date date = repository.getNormalizedUtcDateForToday();

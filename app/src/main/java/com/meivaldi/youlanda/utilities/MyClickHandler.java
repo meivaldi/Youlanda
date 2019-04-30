@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,9 +41,11 @@ public class MyClickHandler {
     private Context context;
     private Dialog purchaseDialog;
     private Dialog moneyDialog;
+    private AppCompatSpinner spinner;
 
-    public MyClickHandler(Context context) {
+    public MyClickHandler(Context context, AppCompatSpinner spinner) {
         this.context = context;
+        this.spinner = spinner;
     }
 
     public void purchase(Order order) {
@@ -69,6 +72,7 @@ public class MyClickHandler {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
                 Toast.makeText(context, "Berhasil menyimpan transaksi", Toast.LENGTH_SHORT).show();
+                spinner.setSelection(0);
             }
 
             @Override
