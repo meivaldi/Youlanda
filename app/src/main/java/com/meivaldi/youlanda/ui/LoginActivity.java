@@ -1,6 +1,5 @@
 package com.meivaldi.youlanda.ui;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

@@ -2,7 +2,7 @@
 <resources>
     <dimen name="card_margin">5dp</dimen>
     <dimen name="card_album_radius">0dp</dimen>
-    <dimen name="album_cover_height">160dp</dimen>
+    <dimen name="album_cover_height">130dp</dimen>
 
     <dimen name="tab_max_width">264dp</dimen>
     <dimen name="tab_padding_bottom">16dp</dimen>
