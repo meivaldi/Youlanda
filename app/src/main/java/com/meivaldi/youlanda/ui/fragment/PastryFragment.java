@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,9 +23,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.meivaldi.youlanda.R;
-import com.meivaldi.youlanda.data.ProductRepository;
 import com.meivaldi.youlanda.data.database.product.Product;
-import com.meivaldi.youlanda.databinding.FragmentBreadBinding;
+import com.meivaldi.youlanda.databinding.FragmentDonutBinding;
+import com.meivaldi.youlanda.databinding.FragmentPastryBinding;
 import com.meivaldi.youlanda.ui.MainActivityViewModel;
 import com.meivaldi.youlanda.ui.MainViewModelFactory;
 import com.meivaldi.youlanda.ui.ProductAdapter;
@@ -35,30 +34,24 @@ import com.meivaldi.youlanda.utilities.InjectorUtils;
 import java.util.List;
 
 @SuppressLint("ValidFragment")
-public class BreadFragment extends Fragment implements ProductAdapter.ProductAdapterListener {
+public class PastryFragment extends Fragment implements ProductAdapter.ProductAdapterListener {
 
     private MainActivityViewModel viewModel;
-    private FragmentBreadBinding binding;
+    private FragmentPastryBinding binding;
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
     private List<Product> productList;
     private SearchView searchView;
-    private BreadFragmentListener listener;
+    private PastryFragmentListener listener;
 
-    public BreadFragment(BreadFragmentListener listener) {
+    public PastryFragment(PastryFragmentListener listener) {
         this.listener = listener;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bread, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pastry, container, false);
 
         recyclerView = binding.productList;
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 4);
@@ -66,7 +59,7 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(4, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getContext(), "roti");
+        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getContext(), "KUE KERING");
         viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
 
         viewModel.getProductList().observe(this, products -> {
@@ -77,84 +70,6 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
 
         View view = binding.getRoot();
         return view;
-    }
-
-    @Override
-    public void onProductClicked(Product product) {
-        int stok = Integer.valueOf(product.getStok());
-
-        if (stok <= 0) {
-            if (product.isSelected()) {
-                product.setSelected(product.isSelected() ? false : true);
-
-                listener.onBreadProductClicked(product);
-            } else {
-                Toast.makeText(getContext(), "Stok habis!", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            product.setSelected(product.isSelected() ? false : true);
-
-            listener.onBreadProductClicked(product);
-        }
-    }
-
-    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int spanCount;
-        private int spacing;
-        private boolean includeEdge;
-
-        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
-            this.spanCount = spanCount;
-            this.spacing = spacing;
-            this.includeEdge = includeEdge;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int position = parent.getChildAdapterPosition(view);
-            int column = position % spanCount;
-
-            if (includeEdge) {
-                outRect.left = spacing - column * spacing / spanCount;
-                outRect.right = (column + 1) * spacing / spanCount;
-
-                if (position < spanCount) {
-                    outRect.top = spacing;
-                }
-                outRect.bottom = spacing;
-            } else {
-                outRect.left = column * spacing / spanCount;
-                outRect.right = spacing - (column + 1) * spacing / spanCount;
-                if (position >= spanCount) {
-                    outRect.top = spacing;
-                }
-            }
-        }
-    }
-
-    /*@Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if (this.isVisible()) {
-            if (!isVisibleToUser) {
-                ProductRepository repository = InjectorUtils.provideRepository(getContext());
-                for (Product product: productList) {
-                    repository.updateProduct(product);
-                }
-            }
-        }
-    }*/
-
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     @Override
@@ -195,7 +110,67 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
         return super.onOptionsItemSelected(item);
     }
 
-    public interface BreadFragmentListener {
-        void onBreadProductClicked(Product product);
+    @Override
+    public void onProductClicked(Product product) {
+        int stok = Integer.valueOf(product.getStok());
+
+        if (stok <= 0) {
+            if (product.isSelected()) {
+                product.setSelected(product.isSelected() ? false : true);
+
+                listener.onPastryProductClicked(product);
+            } else {
+                Toast.makeText(getContext(), "Stok habis!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            product.setSelected(product.isSelected() ? false : true);
+
+            listener.onPastryProductClicked(product);
+        }
     }
+
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+
+    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+
+        private int spanCount;
+        private int spacing;
+        private boolean includeEdge;
+
+        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+            this.spanCount = spanCount;
+            this.spacing = spacing;
+            this.includeEdge = includeEdge;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int position = parent.getChildAdapterPosition(view);
+            int column = position % spanCount;
+
+            if (includeEdge) {
+                outRect.left = spacing - column * spacing / spanCount;
+                outRect.right = (column + 1) * spacing / spanCount;
+
+                if (position < spanCount) {
+                    outRect.top = spacing;
+                }
+                outRect.bottom = spacing;
+            } else {
+                outRect.left = column * spacing / spanCount;
+                outRect.right = spacing - (column + 1) * spacing / spanCount;
+                if (position >= spanCount) {
+                    outRect.top = spacing;
+                }
+            }
+        }
+    }
+
+    public interface PastryFragmentListener {
+        void onPastryProductClicked(Product product);
+    }
+
 }

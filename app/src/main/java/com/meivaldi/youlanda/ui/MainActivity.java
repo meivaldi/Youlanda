@@ -2,7 +2,6 @@ package com.meivaldi.youlanda.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
@@ -45,9 +44,9 @@ import com.meivaldi.youlanda.data.network.RetrofitClientInstance;
 import com.meivaldi.youlanda.databinding.ActivityMainBinding;
 import com.meivaldi.youlanda.databinding.TutupKasirDialogBinding;
 import com.meivaldi.youlanda.ui.fragment.AllProductFragment;
-import com.meivaldi.youlanda.ui.fragment.BreadFragment;
-import com.meivaldi.youlanda.ui.fragment.BrowniesFragment;
 import com.meivaldi.youlanda.ui.fragment.DonutFragment;
+import com.meivaldi.youlanda.ui.fragment.JamFragment;
+import com.meivaldi.youlanda.ui.fragment.PastryFragment;
 import com.meivaldi.youlanda.ui.fragment.SpongeFragment;
 import com.meivaldi.youlanda.ui.fragment.TartFragment;
 import com.meivaldi.youlanda.utilities.CashierHandler;
@@ -66,12 +65,14 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         AllProductFragment.AllProductFragmentListener,
-        BreadFragment.BreadFragmentListener,
         TartFragment.TartFragmentListener,
         SpongeFragment.SpongeFragmentListener,
         DonutFragment.DonutFragmentListener,
-        BrowniesFragment.BrowniesFragmentListener,
+        PastryFragment.PastryFragmentListener,
+        JamFragment.JamFragmentListener,
         Runnable {
+
+    public static final String PREF = "youlanda";
 
     private RecyclerView cart;
     private CartAdapter cartAdapter;
@@ -144,11 +145,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFrag(new AllProductFragment(this), "Semua");
-        viewPagerAdapter.addFrag(new BreadFragment(this), "Roti");
-        viewPagerAdapter.addFrag(new TartFragment(this), "Tar");
-        viewPagerAdapter.addFrag(new SpongeFragment(this), "Bolu");
-        viewPagerAdapter.addFrag(new DonutFragment(this), "Donut");
-        viewPagerAdapter.addFrag(new BrowniesFragment(this), "Brownies");
+        viewPagerAdapter.addFrag(new TartFragment(this), "TART");
+        viewPagerAdapter.addFrag(new SpongeFragment(this), "BOLU & CAKE");
+        viewPagerAdapter.addFrag(new DonutFragment(this), "DONAT");
+        viewPagerAdapter.addFrag(new PastryFragment(this), "KUE KERING");
+        viewPagerAdapter.addFrag(new JamFragment(this), "SELAI, CERES & MARGARIN");
         viewPager.setAdapter(viewPagerAdapter);
 
         tabLayout.setupWithViewPager(viewPager);
@@ -287,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             tutupKasirDialog = new Dialog(MainActivity.this);
             tutupKasirDialog.setContentView(binding.getRoot());
-            tutupKasirDialog.setCancelable(false);
+            tutupKasirDialog.setCancelable(true);
 
             CashierHandler cashHandler = new CashierHandler(this, getApplicationContext(), tutupKasirDialog);
             binding.setHandlers(cashHandler);
@@ -317,35 +318,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.replace(R.id.frame_layout, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
-
-    @Override
-    public void onBreadProductClicked(Product product) {
-        int stok = Integer.valueOf(product.getStok());
-
-        if (product.isSelected()) {
-            cartList.add(new Cart(product, 1));
-
-            stok -= 1;
-            product.setStok(String.valueOf(stok));
-        } else {
-            int index = getIndex(cartList, product.getNama());
-
-            stok += cartList.get(index).getQuantity();
-            product.setStok(String.valueOf(stok));
-
-            cartList.remove(index);
-        }
-
-        order.setCartSum(cartList.size());
-        order.setTotal();
-        order.setTax();
-        order.setDiskon();
-        order.setSpecial_discount();
-        order.setDiscount(new Discount(0));
-        order.setPrice();
-
-        cartAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -465,7 +437,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onBrowniesProductClicked(Product product) {
+    public void onPastryProductClicked(Product product) {
+        int stok = Integer.valueOf(product.getStok());
+
+        if (product.isSelected()) {
+            cartList.add(new Cart(product, 1));
+
+            stok -= 1;
+            product.setStok(String.valueOf(stok));
+        } else {
+            int index = getIndex(cartList, product.getNama());
+
+            stok += cartList.get(index).getQuantity();
+            product.setStok(String.valueOf(stok));
+
+            cartList.remove(index);
+        }
+
+        order.setCartSum(cartList.size());
+        order.setTotal();
+        order.setTax();
+        order.setDiskon();
+        order.setSpecial_discount();
+        order.setDiscount(new Discount(0));
+        order.setPrice();
+
+        cartAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onJamProductClicked(Product product) {
         int stok = Integer.valueOf(product.getStok());
 
         if (product.isSelected()) {

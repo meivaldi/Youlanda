@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
 import com.meivaldi.youlanda.data.database.product.Product;
@@ -47,6 +49,7 @@ public class AllProductFragment extends Fragment implements ProductAdapter.Produ
     private List<Product> productList;
     private SearchView searchView;
     private AllProductFragmentListener listener;
+    private SharedPreferences preferences;
 
     @SuppressLint("ValidFragment")
     public AllProductFragment(AllProductFragmentListener listener) {
@@ -111,6 +114,14 @@ public class AllProductFragment extends Fragment implements ProductAdapter.Produ
             }
         } else {
             product.setSelected(product.isSelected() ? false : true);
+
+            /*preferences = getActivity().getSharedPreferences(MainActivity.PREF, 0);
+            SharedPreferences.Editor editor = preferences.edit();
+
+            Gson gSon = new Gson();
+            String jSon = gSon.toJson(product);
+            editor.putString(product.getKode(), jSon);
+            editor.commit();*/
 
             listener.onAllProductClicked(product);
         }
@@ -197,4 +208,5 @@ public class AllProductFragment extends Fragment implements ProductAdapter.Produ
     public interface AllProductFragmentListener {
         void onAllProductClicked(Product product);
     }
+
 }

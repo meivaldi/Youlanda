@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,9 +24,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.meivaldi.youlanda.R;
-import com.meivaldi.youlanda.data.ProductRepository;
 import com.meivaldi.youlanda.data.database.product.Product;
-import com.meivaldi.youlanda.databinding.FragmentBrowniesBinding;
+import com.meivaldi.youlanda.databinding.FragmentJamBinding;
 import com.meivaldi.youlanda.ui.MainActivityViewModel;
 import com.meivaldi.youlanda.ui.MainViewModelFactory;
 import com.meivaldi.youlanda.ui.ProductAdapter;
@@ -34,24 +34,24 @@ import com.meivaldi.youlanda.utilities.InjectorUtils;
 import java.util.List;
 
 @SuppressLint("ValidFragment")
-public class BrowniesFragment extends Fragment implements ProductAdapter.ProductAdapterListener {
+public class JamFragment extends Fragment implements ProductAdapter.ProductAdapterListener {
 
     private MainActivityViewModel viewModel;
-    private FragmentBrowniesBinding binding;
+    private FragmentJamBinding binding;
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
     private List<Product> productList;
     private SearchView searchView;
-    public BrowniesFragmentListener listener;
+    private JamFragmentListener listener;
 
-    public BrowniesFragment(BrowniesFragmentListener listener) {
+    public JamFragment(JamFragmentListener listener) {
         this.listener = listener;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_brownies, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jam, container, false);
 
         recyclerView = binding.productList;
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 4);
@@ -59,7 +59,7 @@ public class BrowniesFragment extends Fragment implements ProductAdapter.Product
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(4, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getContext(), "brownies");
+        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getContext(), "SELAI, CERES & MARGARIN");
         viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
 
         viewModel.getProductList().observe(this, products -> {
@@ -71,39 +71,6 @@ public class BrowniesFragment extends Fragment implements ProductAdapter.Product
         View view = binding.getRoot();
         return view;
     }
-
-    @Override
-    public void onProductClicked(Product product) {
-        int stok = Integer.valueOf(product.getStok());
-
-        if (stok <= 0) {
-            if (product.isSelected()) {
-                product.setSelected(product.isSelected() ? false : true);
-
-                listener.onBrowniesProductClicked(product);
-            } else {
-                Toast.makeText(getContext(), "Stok habis!", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            product.setSelected(product.isSelected() ? false : true);
-
-            listener.onBrowniesProductClicked(product);
-        }
-    }
-
-    /*@Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if (this.isVisible()) {
-            if (!isVisibleToUser) {
-                ProductRepository repository = InjectorUtils.provideRepository(getContext());
-                for (Product product: productList) {
-                    repository.updateProduct(product);
-                }
-            }
-        }
-    }*/
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -141,6 +108,25 @@ public class BrowniesFragment extends Fragment implements ProductAdapter.Product
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onProductClicked(Product product) {
+        int stok = Integer.valueOf(product.getStok());
+
+        if (stok <= 0) {
+            if (product.isSelected()) {
+                product.setSelected(product.isSelected() ? false : true);
+
+                listener.onJamProductClicked(product);
+            } else {
+                Toast.makeText(getContext(), "Stok habis!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            product.setSelected(product.isSelected() ? false : true);
+
+            listener.onJamProductClicked(product);
+        }
     }
 
     private int dpToPx(int dp) {
@@ -183,8 +169,8 @@ public class BrowniesFragment extends Fragment implements ProductAdapter.Product
         }
     }
 
-    public interface BrowniesFragmentListener {
-        void onBrowniesProductClicked(Product product);
+    public interface JamFragmentListener {
+        void onJamProductClicked(Product product);
     }
 
 }

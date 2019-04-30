@@ -24,16 +24,21 @@ public class Karyawan extends BaseObservable implements Serializable {
     @SerializedName("nama")
     String nama;
 
-    public Karyawan(int id, String nik, String nama) {
+    @SerializedName("unit")
+    String unit;
+
+    public Karyawan(int id, String nik, String nama, String unit) {
         this.id = id;
         this.nik = nik;
         this.nama = nama;
+        this.unit = unit;
     }
 
     @Ignore
-    public Karyawan(String nik, String nama) {
+    public Karyawan(String nik, String nama, String unit) {
         this.nik = nik;
         this.nama = nama;
+        this.unit = unit;
     }
 
     @Bindable
@@ -64,5 +69,15 @@ public class Karyawan extends BaseObservable implements Serializable {
     public void setNik(String nik) {
         this.nik = nik;
         notifyPropertyChanged(BR.nik);
+    }
+
+    @Bindable
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+        notifyPropertyChanged(BR.unit);
     }
 }

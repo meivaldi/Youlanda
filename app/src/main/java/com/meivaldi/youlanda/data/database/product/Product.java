@@ -26,6 +26,10 @@ public class Product extends BaseObservable {
     @Expose
     private int id;
 
+    @SerializedName("kode_produk")
+    @Expose
+    private String kode;
+
     @SerializedName("nama_produk")
     @Expose
     private String nama;
@@ -52,7 +56,7 @@ public class Product extends BaseObservable {
 
     private boolean selected;
 
-    public Product(int id, String nama, String foto, String harga, String jenis, String stok, String diskon) {
+    public Product(int id, String nama, String foto, String harga, String jenis, String stok, String diskon, String kode) {
         this.id = id;
         this.nama = nama;
         this.foto = foto;
@@ -61,6 +65,7 @@ public class Product extends BaseObservable {
         this.stok = stok;
         this.diskon = diskon;
         this.selected = false;
+        this.kode = kode;
     }
 
     /*@Ignore
@@ -113,6 +118,11 @@ public class Product extends BaseObservable {
         return selected;
     }
 
+    @Bindable
+    public String getKode() {
+        return kode;
+    }
+
     public void setSelected(boolean selected) {
         this.selected = selected;
         notifyPropertyChanged(BR.selected);
@@ -131,6 +141,11 @@ public class Product extends BaseObservable {
     public void setStok(String stok) {
         this.stok = stok;
         notifyPropertyChanged(BR.stok);
+    }
+
+    public void setKode(String kode) {
+        this.kode = kode;
+        notifyPropertyChanged(BR.kode);
     }
 
     @BindingAdapter({"android:productImage"})

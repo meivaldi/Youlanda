@@ -66,7 +66,7 @@ public class SpongeFragment extends Fragment implements ProductAdapter.ProductAd
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(4, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getContext(), "bolu");
+        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getContext(), "BOLU & CAKE");
         viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
 
         viewModel.getProductList().observe(this, products -> {

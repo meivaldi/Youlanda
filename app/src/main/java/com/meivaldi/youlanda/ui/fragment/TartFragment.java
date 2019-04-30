@@ -67,7 +67,7 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(4, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getContext(), "tar");
+        MainViewModelFactory factory = InjectorUtils.provideMainActivityViewModelFactory(getContext(), "TART");
         viewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
 
         viewModel.getProductList().observe(this, products -> {
@@ -137,6 +137,7 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
 
             listener.onTartProductClicked(product);
         }
+
     }
 
     /*@Override

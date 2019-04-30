@@ -15,7 +15,10 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 import com.meivaldi.youlanda.AppExecutors;
+import com.meivaldi.youlanda.data.ProductRepository;
+import com.meivaldi.youlanda.data.database.karyawan.Karyawan;
 import com.meivaldi.youlanda.data.database.product.Product;
+import com.meivaldi.youlanda.utilities.InjectorUtils;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -91,8 +94,11 @@ public class ProductNetworkDataSource {
         Log.d(LOG_TAG, "Fetch product started");
         executors.networkIO().execute(() -> {
             try {
+                ProductRepository repository = InjectorUtils.provideRepository(context);
+                Karyawan karyawan = repository.getKaryawan();
+
                 GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-                Call<List<Product>> call = service.getAllBreads();
+                Call<List<Product>> call = service.getAllBreads(karyawan.getUnit());
                 call.enqueue(new Callback<List<Product>>() {
                     @Override
                     public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {

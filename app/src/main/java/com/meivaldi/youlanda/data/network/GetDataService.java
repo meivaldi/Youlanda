@@ -14,8 +14,9 @@ import retrofit2.http.POST;
 
 public interface GetDataService {
 
-    @GET("/android/get_product.php")
-    Call<List<Product>> getAllBreads();
+    @POST("/android/get_product.php")
+    @FormUrlEncoded
+    Call<List<Product>> getAllBreads(@Field("unit") String unit);
 
     @POST("/android/store_product.php")
     @FormUrlEncoded

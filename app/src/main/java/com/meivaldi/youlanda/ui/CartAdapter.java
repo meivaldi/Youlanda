@@ -74,6 +74,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 order.setTax();
                 order.setDiskon();
                 order.setPrice();
+
             }
         });
 

@@ -102,7 +102,8 @@ public class LoginActivity extends AppCompatActivity {
                         session.setLogin(true);
                         String nik = jObj.getString("nik");
                         String nama = jObj.getString("nama");
-                        Karyawan karyawan = new Karyawan(nik, nama);
+                        String unit = jObj.getString("unit");
+                        Karyawan karyawan = new Karyawan(nik, nama, unit);
 
                         ProductRepository repository = InjectorUtils.provideRepository(getApplicationContext());
                         repository.insertKaryawan(karyawan);

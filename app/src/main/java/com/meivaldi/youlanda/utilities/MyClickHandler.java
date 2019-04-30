@@ -71,13 +71,13 @@ public class MyClickHandler {
         save.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
-                Toast.makeText(context, "Berhasil menyimpan transaksi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Transaksi Berhasil", Toast.LENGTH_SHORT).show();
                 spinner.setSelection(0);
             }
 
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
-                Toast.makeText(context, "Gagal menyimpan transaksi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Transaksi Gagal", Toast.LENGTH_SHORT).show();
             }
         });
 
