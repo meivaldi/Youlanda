@@ -36,7 +36,7 @@ public class DataBindingUtils {
     }
 
     public static String countDiscount(int diskon) {
-        return "- Rp. " + diskon;
+        return "- Rp." + diskon + ",-";
     }
 
     public static boolean isStockEmpty(String stok) {
