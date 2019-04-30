@@ -83,7 +83,7 @@ public class AllProductFragment extends Fragment implements ProductAdapter.Produ
         return view;
     }
 
-    @Override
+    /*@Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
@@ -95,7 +95,7 @@ public class AllProductFragment extends Fragment implements ProductAdapter.Produ
                 }
             }
         }
-    }
+    }*/
 
     @Override
     public void onProductClicked(Product product) {

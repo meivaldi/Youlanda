@@ -139,7 +139,7 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
         }
     }
 
-    @Override
+    /*@Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
@@ -151,7 +151,7 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
                 }
             }
         }
-    }
+    }*/
 
     @Override
     public void onPause() {

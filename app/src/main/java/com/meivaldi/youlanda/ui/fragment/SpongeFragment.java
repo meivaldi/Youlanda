@@ -133,7 +133,7 @@ public class SpongeFragment extends Fragment implements ProductAdapter.ProductAd
         }
     }
 
-    @Override
+    /*@Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
@@ -145,7 +145,7 @@ public class SpongeFragment extends Fragment implements ProductAdapter.ProductAd
                 }
             }
         }
-    }
+    }*/
 
     private int dpToPx(int dp) {
         Resources r = getResources();

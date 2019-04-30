@@ -91,7 +91,7 @@ public class BrowniesFragment extends Fragment implements ProductAdapter.Product
         }
     }
 
-    @Override
+    /*@Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
@@ -103,7 +103,7 @@ public class BrowniesFragment extends Fragment implements ProductAdapter.Product
                 }
             }
         }
-    }
+    }*/
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

@@ -133,7 +133,7 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
         }
     }
 
-    @Override
+    /*@Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
@@ -145,7 +145,7 @@ public class BreadFragment extends Fragment implements ProductAdapter.ProductAda
                 }
             }
         }
-    }
+    }*/
 
     private int dpToPx(int dp) {
         Resources r = getResources();
