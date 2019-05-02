@@ -30,12 +30,13 @@ import com.meivaldi.youlanda.databinding.FragmentTartBinding;
 import com.meivaldi.youlanda.ui.MainActivityViewModel;
 import com.meivaldi.youlanda.ui.MainViewModelFactory;
 import com.meivaldi.youlanda.ui.ProductAdapter;
+import com.meivaldi.youlanda.ui.interfaces.Swipeable;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 
 import java.util.List;
 
 @SuppressLint("ValidFragment")
-public class TartFragment extends Fragment implements ProductAdapter.ProductAdapterListener {
+public class TartFragment extends Fragment implements ProductAdapter.ProductAdapterListener, Swipeable {
 
     private MainActivityViewModel viewModel;
     private FragmentTartBinding binding;
@@ -78,6 +79,15 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
 
         View view = binding.getRoot();
         return view;
+    }
+
+    @Override
+    public void onFragmentSwiped() {
+        ProductRepository repository = InjectorUtils.provideRepository(getContext());
+
+        for (Product product: productList) {
+            repository.updateProduct(product);
+        }
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
@@ -137,22 +147,7 @@ public class TartFragment extends Fragment implements ProductAdapter.ProductAdap
 
             listener.onTartProductClicked(product);
         }
-
     }
-
-    /*@Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if (this.isVisible()) {
-            if (!isVisibleToUser) {
-                ProductRepository repository = InjectorUtils.provideRepository(getContext());
-                for (Product product: productList) {
-                    repository.updateProduct(product);
-                }
-            }
-        }
-    }*/
 
     @Override
     public void onPause() {

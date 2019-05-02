@@ -49,6 +49,7 @@ import com.meivaldi.youlanda.ui.fragment.JamFragment;
 import com.meivaldi.youlanda.ui.fragment.PastryFragment;
 import com.meivaldi.youlanda.ui.fragment.SpongeFragment;
 import com.meivaldi.youlanda.ui.fragment.TartFragment;
+import com.meivaldi.youlanda.ui.interfaces.Swipeable;
 import com.meivaldi.youlanda.utilities.CashierHandler;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 import com.meivaldi.youlanda.utilities.MyClickHandler;
@@ -71,8 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PastryFragment.PastryFragmentListener,
         JamFragment.JamFragmentListener,
         Runnable {
-
-    public static final String PREF = "youlanda";
 
     private RecyclerView cart;
     private CartAdapter cartAdapter;
@@ -159,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onPageSelected(int i) {
-                Toast.makeText(getApplicationContext(), viewPagerAdapter.getPageTitle(i).toString(), Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -591,4 +590,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    public void onFragmentSwiped() {
+        Toast.makeText(this, "Swipped", Toast.LENGTH_SHORT).show();
+    }
 }
