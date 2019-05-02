@@ -151,6 +151,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPagerAdapter.addFrag(new PastryFragment(this), "KUE KERING");
         viewPagerAdapter.addFrag(new JamFragment(this), "SELAI, CERES & MARGARIN");
         viewPager.setAdapter(viewPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                Toast.makeText(getApplicationContext(), viewPagerAdapter.getPageTitle(i).toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
         tabLayout.setupWithViewPager(viewPager);
 
