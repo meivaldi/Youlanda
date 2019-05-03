@@ -589,9 +589,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             order.setTime(clock);
         }
     }
-
-    @Override
-    public void onFragmentSwiped() {
-        Toast.makeText(this, "Swipped", Toast.LENGTH_SHORT).show();
-    }
 }
