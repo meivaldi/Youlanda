@@ -1,9 +1,19 @@
 package com.meivaldi.youlanda.utilities;
 
 import android.app.Dialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -27,105 +37,341 @@ import com.meivaldi.youlanda.databinding.CashoutBinding;
 import com.meivaldi.youlanda.databinding.MoneyDigitBinding;
 import com.meivaldi.youlanda.databinding.SpecialDiskonDialogBinding;
 import com.meivaldi.youlanda.ui.CheckoutAdapter;
+import com.meivaldi.youlanda.ui.DeviceListActivity;
 import com.meivaldi.youlanda.ui.DiscountAdapter;
+import com.meivaldi.youlanda.ui.MainActivity;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import app.akexorcist.bluetotohspp.library.BluetoothState;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MyClickHandler {
-
     private Context context;
     private Dialog purchaseDialog;
     private Dialog moneyDialog;
     private AppCompatSpinner spinner;
+    private AppCompatActivity activity;
 
-    public MyClickHandler(Context context, AppCompatSpinner spinner) {
+    private BluetoothService bluetoothService;
+    private BluetoothAdapter mBluetoothAdapter = null;
+
+    public MyClickHandler(Context context, AppCompatSpinner spinner, AppCompatActivity activity, BluetoothService service) {
         this.context = context;
         this.spinner = spinner;
+        this.activity = activity;
+
+        bluetoothService = service;
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
     public void purchase(Order order) {
-        List<Cart> cartList = order.getCartList();
+        if (mBluetoothAdapter.isEnabled()) {
+            if (bluetoothService.getState() == BluetoothService.STATE_CONNECTED) {
+                List<Cart> cartList = order.getCartList();
 
-        ProductRepository repository = InjectorUtils.provideRepository(context);
-        List<Product> selectedProduct = new ArrayList<>();
+                ProductRepository repository = InjectorUtils.provideRepository(context);
+                List<Product> selectedProduct = new ArrayList<>();
 
-        for (Cart cart : cartList) {
-            Product product = cart.getProduct();
-            product.setSelected(false);
+                for (Cart cart : cartList) {
+                    Product product = cart.getProduct();
+                    product.setSelected(false);
 
-            repository.updateProduct(product);
-            selectedProduct.add(product);
-        }
-
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-        Call<Product> call;
-
-        Call<Order> save = service.saveOrder(order.getId(), order.getCashier(), order.getWaiter(), order.getTime(), order.getJenis(),
-                order.getTotal(), order.getDiskon(), order.getSpecial_discount(), order.getTax(), order.getPrice(),
-                order.getCash());
-        save.enqueue(new Callback<Order>() {
-            @Override
-            public void onResponse(Call<Order> call, Response<Order> response) {
-                Toast.makeText(context, "Transaksi Berhasil", Toast.LENGTH_SHORT).show();
-                spinner.setSelection(0);
-            }
-
-            @Override
-            public void onFailure(Call<Order> call, Throwable t) {
-                Toast.makeText(context, "Transaksi Gagal", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        changeModal(order.getPrice());
-
-        List<Cart> temp = order.getCartList();
-        int total = 0;
-
-        for (Cart cart: temp) {
-            total += cart.getQuantity();
-        }
-
-        SharedPreferences preferences = context.getSharedPreferences(SessionManager.PREF_NAME, 0);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(SessionManager.KEY_PRODUCT, preferences.getInt(SessionManager.KEY_PRODUCT, 0) + total);
-        editor.putInt(SessionManager.KEY_TRANSACTION, preferences.getInt(SessionManager.KEY_TRANSACTION, 0) + 1);
-        editor.commit();
-
-        order.getCartList().clear();
-        order.setCartSum(0);
-        order.setDiskon();
-        order.setDiscount(new Discount(0));
-        order.setSpecial_discount();
-        order.setTotal();
-        order.setTax();
-        order.setPrice();
-        order.setWaiter("");
-        order.setId(order.getId() + 1);
-
-        for (int i = 0; i < selectedProduct.size(); i++) {
-            Product selected = selectedProduct.get(i);
-            Log.d("TES", selected.getStok() + " " + selected.getNama());
-            call = service.saveProduct(Integer.valueOf(selected.getStok()), selected.getNama());
-
-            call.enqueue(new Callback<Product>() {
-                @Override
-                public void onResponse(Call<Product> call, Response<Product> response) {
-                    //Toast.makeText(context, "Berhasil", Toast.LENGTH_SHORT).show();
+                    repository.updateProduct(product);
+                    selectedProduct.add(product);
                 }
 
-                @Override
-                public void onFailure(Call<Product> call, Throwable t) {
-                    //Toast.makeText(context, "Gagal", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+                GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+                Call<Product> call;
 
-        purchaseDialog.dismiss();
+                Call<Order> save = service.saveOrder(order.getId(), order.getCashier(), order.getWaiter(), order.getTime(), order.getJenis(),
+                        order.getTotal(), order.getDiskon(), order.getSpecial_discount(), order.getTax(), order.getPrice(),
+                        order.getCash());
+                save.enqueue(new Callback<Order>() {
+                    @Override
+                    public void onResponse(Call<Order> call, Response<Order> response) {
+                        Toast.makeText(context, "Transaksi Berhasil", Toast.LENGTH_SHORT).show();
+                        spinner.setSelection(0);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Order> call, Throwable t) {
+                        Toast.makeText(context, "Transaksi Gagal", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                print(order);
+                changeModal(order.getPrice());
+
+                List<Cart> temp = order.getCartList();
+                int total = 0;
+
+                for (Cart cart : temp) {
+                    total += cart.getQuantity();
+                }
+
+                SharedPreferences preferences = context.getSharedPreferences(SessionManager.PREF_NAME, 0);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt(SessionManager.KEY_PRODUCT, preferences.getInt(SessionManager.KEY_PRODUCT, 0) + total);
+                editor.putInt(SessionManager.KEY_TRANSACTION, preferences.getInt(SessionManager.KEY_TRANSACTION, 0) + 1);
+                editor.commit();
+
+                order.getCartList().clear();
+                order.setCartSum(0);
+                order.setDiskon();
+                order.setDiscount(new Discount(0));
+                order.setSpecial_discount();
+                order.setTotal();
+                order.setTax();
+                order.setPrice();
+                order.setWaiter("");
+                order.setId(order.getId() + 1);
+
+                for (int i = 0; i < selectedProduct.size(); i++) {
+                    Product selected = selectedProduct.get(i);
+                    Log.d("TES", selected.getStok() + " " + selected.getNama());
+                    call = service.saveProduct(Integer.valueOf(selected.getStok()), selected.getNama());
+
+                    call.enqueue(new Callback<Product>() {
+                        @Override
+                        public void onResponse(Call<Product> call, Response<Product> response) {
+                            //Toast.makeText(context, "Berhasil", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Product> call, Throwable t) {
+                            //Toast.makeText(context, "Gagal", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                purchaseDialog.dismiss();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Printer tidak terhubung, hidupkan printer?")
+                        .setPositiveButton("Tidak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                return;
+                            }
+                        })
+                        .setNegativeButton("Ya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent serverIntent = new Intent(context, DeviceListActivity.class);
+                                activity.startActivityForResult(serverIntent, MainActivity.REQUEST_CONNECT_DEVICE);
+                            }
+                        }).create();
+
+                builder.show();
+            }
+        } else {
+            Toast.makeText(context, "Hidupkan bluetooth terlebih dahulu!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void print(Order order) {
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_bw);
+        int nMode = 0;
+        int nPaperWidth = 384;
+
+        if (bitmap != null) {
+            try {
+                byte[] data = PrintPicture.POS_PrintBMP(bitmap, nPaperWidth, nMode);
+
+                SendDataByte(Command.ESC_Init);
+                SendDataByte(Command.LF);
+                SendDataByte(data);
+                SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(30));
+                SendDataByte(PrinterCommand.POS_Set_Cut(1));
+                SendDataByte(PrinterCommand.POS_Set_PrtInit());
+
+                SendDataByte("\n".getBytes("GBK"));
+                Command.ESC_Align[2] = 0x02;
+                SendDataByte(Command.ESC_Align);
+                Command.GS_ExclamationMark[2] = 0x05;
+                SendDataByte(Command.GS_ExclamationMark);
+                SendDataString(order.getTime());
+                SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
+                SendDataByte(Command.GS_V_m_n);
+
+                Command.ESC_Align[2] = 0x00;
+                SendDataByte(Command.ESC_Align);
+                Command.GS_ExclamationMark[2] = 0x05;
+                SendDataByte(Command.GS_ExclamationMark);
+                String info = "Nomor Order: #" + order.getId() +
+                        "\nJenis Order: " + order.getJenis() +
+                        "\nKasir      : " + order.getCashier() +
+                        "\nPelayan    : " + order.getWaiter();
+                String details = "\n\nNama Barang     @       Harga\n";
+
+                String orderDetails = "";
+                int len1 = "Nama Barang".length();
+                int len2 = "@".length();
+                int len3 = "Harga".length();
+
+                for (Cart cart: order.getCartList()) {
+                    String temp = cart.getProduct().getNama();
+                    String temp2 = DataBindingUtils.currencyConvert(
+                            Integer.valueOf(cart.getProduct().getHarga()) * cart.getQuantity());
+
+                    int gap1 = 0;
+                    int gap2 = gap2 = (14 - temp2.length()) + 2;;
+
+                    if (cart.getProduct().getNama().length() >= 14) {
+                        temp = insertString(cart.getProduct().getNama(), "\n", 14);
+                        gap1 = (len1 - (temp.length() % 14)) + 8;
+                    } else {
+                        gap1 = 17 - temp.length();
+                    }
+
+                    String spasi1 = "";
+                    for (int i=0; i<gap1-1; i++) {
+                        spasi1 += " ";
+                    }
+
+                    String spasi2 = "";
+                    for (int i=0; i<gap2-1; i++) {
+                        spasi2 += " ";
+                    }
+
+                    Log.d("TAG2", "Len1 : " + len1);
+                    Log.d("TAG2", "Gap1: " + gap1);
+                    Log.d("TAG2", "Gap2: " + gap2);
+                    Log.d("TAG2", "Spasi1: " + spasi1.length());
+                    Log.d("TAG2", "Spasi2: " + spasi2.length());
+
+                    orderDetails += temp + spasi1 + cart.getQuantity() + spasi2 + DataBindingUtils.currencyConvert(
+                            Integer.valueOf(cart.getProduct().getHarga()) * cart.getQuantity()) + "\n";
+                }
+
+                int operand1 = DataBindingUtils.currencyConvert(order.getTotal()).length() + "Sub Total:".length();
+                int sp1 = MainActivity.CHAR_MAX - operand1;
+                String space1 = "";
+                for (int i=0; i<sp1-1; i++) {
+                    space1 += " ";
+                }
+
+                int operand2 = DataBindingUtils.currencyConvert(order.getDiskon()).length() + "Diskon".length();
+                int sp2 = MainActivity.CHAR_MAX - operand2;
+                String space2 = "";
+                for (int i=0; i<sp2-1; i++) {
+                    space2 += " ";
+                }
+
+                int operand3 = DataBindingUtils.currencyConvert(order.getSpecial_discount()).length() + "Diskon Spesial".length();
+                int sp3 = MainActivity.CHAR_MAX - operand3;
+                String space3 = "";
+                for (int i=0; i<sp3-1; i++) {
+                    space3 += " ";
+                }
+
+                int operand4 = DataBindingUtils.currencyConvert(order.getTax()).length() + "Ppn(10%)".length();
+                int sp4 = MainActivity.CHAR_MAX - operand4;
+                String space4 = "";
+                for (int i=0; i<sp4-1; i++) {
+                    space4 += " ";
+                }
+
+                int operand5 = DataBindingUtils.currencyConvert(order.getPrice()).length() + "Total Tagihan".length();
+                int sp5 = MainActivity.CHAR_MAX - operand5;
+                String space5 = "";
+                for (int i=0; i<sp5-1; i++) {
+                    space5 += " ";
+                }
+
+                int operand6 = DataBindingUtils.currencyConvert(order.getCash()).length() + "Dibayar".length();
+                int sp6 = MainActivity.CHAR_MAX - operand6;
+                String space6 = "";
+                for (int i=0; i<sp6-1; i++) {
+                    space6 += " ";
+                }
+
+                int operand7 = DataBindingUtils.getReturn(order).length() + "Kembalian".length();
+                int sp7 = MainActivity.CHAR_MAX - operand7;
+                String space7 = "";
+                for (int i=0; i<sp7-1; i++) {
+                    space7 += " ";
+                }
+
+                String money = "\nSub Total: " + space1 + DataBindingUtils.currencyConvert(order.getTotal()) + "\n" +
+                        "Diskon " + space2 + DataBindingUtils.currencyConvert(order.getDiskon()) + "\n" +
+                        "Diskon Spesial " + space3 + DataBindingUtils.currencyConvert(order.getSpecial_discount()) + "\n" +
+                        "Ppn(10%) " + space4 + DataBindingUtils.currencyConvert(order.getTax()) + "\n" +
+                        "Total Tagihan " + space5 + DataBindingUtils.currencyConvert(order.getPrice()) + "\n" +
+                        "Dibayar " + space6 + DataBindingUtils.currencyConvert(order.getCash()) + "\n" +
+                        "Kembalian " + space7 + DataBindingUtils.getReturn(order) + "\n";
+
+                SendDataByte(info.getBytes("GBK"));
+                SendDataByte(details.getBytes("GBK"));
+                SendDataByte(orderDetails.getBytes("GBK"));
+                SendDataByte(money.getBytes("GBK"));
+                SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(25));
+                Log.d("TAG", space1.length() + " " + space2.length()
+                        + " " + space3.length()
+                        + " " + space4.length()
+                        + " " + space5.length()
+                        + " " + space6.length()
+                        + " " + space7.length());
+
+                Log.d("TAG", sp1 + " " + sp2
+                        + " " + sp3
+                        + " " + sp4
+                        + " " + sp5
+                        + " " + sp6
+                        + " " + sp7);
+
+                Log.d("TAG", operand1 + " " + operand2
+                        + " " + operand3
+                        + " " + operand4
+                        + " " + operand5
+                        + " " + operand6
+                        + " " + operand7);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static String insertString(String originalString, String stringToBeInserted,
+            int index) {
+        String newString = originalString.substring(0, index + 1)
+                + stringToBeInserted
+                + originalString.substring(index + 1);
+
+        return newString;
+    }
+
+    private void SendDataString(String data) {
+        if (bluetoothService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(context, "Printer tidak terhubung", Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        if (data.length() > 0) {
+            try {
+                bluetoothService.write(data.getBytes("GBK"));
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void SendDataByte(byte[] data) {
+
+        if (bluetoothService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(context, "Printer tidak terhubung", Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        bluetoothService.write(data);
     }
 
     private void changeModal(int price) {

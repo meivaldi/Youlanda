@@ -1,9 +1,20 @@
 package com.meivaldi.youlanda.ui;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -50,9 +61,13 @@ import com.meivaldi.youlanda.ui.fragment.PastryFragment;
 import com.meivaldi.youlanda.ui.fragment.SpongeFragment;
 import com.meivaldi.youlanda.ui.fragment.TartFragment;
 import com.meivaldi.youlanda.ui.interfaces.Swipeable;
+import com.meivaldi.youlanda.utilities.BluetoothService;
 import com.meivaldi.youlanda.utilities.CashierHandler;
+import com.meivaldi.youlanda.utilities.Command;
 import com.meivaldi.youlanda.utilities.InjectorUtils;
 import com.meivaldi.youlanda.utilities.MyClickHandler;
+import com.meivaldi.youlanda.utilities.PrintPicture;
+import com.meivaldi.youlanda.utilities.PrinterCommand;
 import com.meivaldi.youlanda.utilities.RecyclerTouchListener;
 import com.meivaldi.youlanda.utilities.SessionManager;
 
@@ -73,6 +88,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         JamFragment.JamFragmentListener,
         Runnable {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+    public static final int CHAR_MAX = 32;
+
+    public static final int MESSAGE_STATE_CHANGE = 1;
+    public static final int MESSAGE_READ = 2;
+    public static final int MESSAGE_WRITE = 3;
+    public static final int MESSAGE_DEVICE_NAME = 4;
+    public static final int MESSAGE_TOAST = 5;
+    public static final int MESSAGE_CONNECTION_LOST = 6;
+    public static final int MESSAGE_UNABLE_CONNECT = 7;
+
+    public static final String DEVICE_NAME = "device_name";
+    public static final String TOAST = "toast";
+
+    public static final int REQUEST_CONNECT_DEVICE = 1;
+    public static final int REQUEST_ENABLE_BT = 2;
+    public static final int REQUEST_CHOSE_BMP = 3;
+    public static final int REQUEST_CAMER = 4;
+
+    public static final String CHINESE = "GBK";
+    public static final String THAI = "CP874";
+    public static final String KOREAN = "EUC-KR";
+    public static final String BIG5 = "BIG5";
+
     private RecyclerView cart;
     private CartAdapter cartAdapter;
     private List<Cart> cartList;
@@ -88,10 +127,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ProductRepository repository;
     private Dialog tutupKasirDialog;
 
+    private BluetoothService mService = null;
+    private BluetoothAdapter mBluetoothAdapter = null;
+    private String mConnectedDeviceName = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth tidak tersedia", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
         session = new SessionManager(getApplicationContext());
 
@@ -239,7 +289,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         order.setJenis(jenis);
         order.setCashier(repository.getKaryawan().getNama());
 
-        handler = new MyClickHandler(this, spinner);
+        mService = new BluetoothService(this, mHandler);
+        handler = new MyClickHandler(this, spinner, this, mService);
         binding.setHandlers(handler);
 
         Date date = repository.getNormalizedUtcDateForToday();
@@ -588,5 +639,151 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String clock = sHours + ":" + sMinutes + ":" + sSeconds;
             order.setTime(clock);
         }
+    }
+
+    private void SendDataByte(byte[] data) {
+
+        if (mService.getState() != BluetoothService.STATE_CONNECTED) {
+            Toast.makeText(getApplicationContext(), "Printer tidak terhubung", Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        mService.write(data);
+    }
+
+
+    private final Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MESSAGE_STATE_CHANGE:
+                    switch (msg.arg1) {
+                        case BluetoothService.STATE_CONNECTED:
+
+                            break;
+                        case BluetoothService.STATE_CONNECTING:
+                            break;
+                        case BluetoothService.STATE_LISTEN:
+                        case BluetoothService.STATE_NONE:
+                            break;
+                    }
+                    break;
+                case MESSAGE_WRITE:
+
+                    break;
+                case MESSAGE_READ:
+
+                    break;
+                case MESSAGE_DEVICE_NAME:
+                    mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                    Toast.makeText(getApplicationContext(),
+                            "Terhubung ke " + mConnectedDeviceName,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE_TOAST:
+                    Toast.makeText(getApplicationContext(),
+                            msg.getData().getString(TOAST), Toast.LENGTH_SHORT)
+                            .show();
+                    break;
+                case MESSAGE_CONNECTION_LOST:
+                    Toast.makeText(getApplicationContext(), "Koneksi Printer Terputus",
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE_UNABLE_CONNECT:
+                    Toast.makeText(getApplicationContext(), "Tidak bisa terhubung ke perangkat",
+                            Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+    private void Init() {
+        mService = new BluetoothService(this, mHandler);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode) {
+            case REQUEST_CONNECT_DEVICE:{
+                if (resultCode == Activity.RESULT_OK) {
+                    String address = data.getExtras().getString(
+                            DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+                    if (BluetoothAdapter.checkBluetoothAddress(address)) {
+                        BluetoothDevice device = mBluetoothAdapter
+                                .getRemoteDevice(address);
+                        mService.connect(device);
+                    }
+                }
+                break;
+            }
+            case REQUEST_ENABLE_BT:{
+                if (resultCode == Activity.RESULT_OK) {
+                    Init();
+                } else {
+                    Log.d(TAG, "BT not enabled");
+                    Toast.makeText(this, "Bluetooth does not start, quit the program",
+                            Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+            }
+            case REQUEST_CHOSE_BMP:{
+                if (resultCode == Activity.RESULT_OK){
+
+                }
+                break;
+            }
+            case REQUEST_CAMER:{
+                if (resultCode == Activity.RESULT_OK){
+
+                }
+                break;
+            }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        } else {
+            if (mService == null)
+                Init();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mService != null) {
+
+            if (mService.getState() == BluetoothService.STATE_NONE) {
+                mService.start();
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (mService != null)
+            mService.stop();
     }
 }
