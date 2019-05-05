@@ -6,6 +6,20 @@
         android:icon="@drawable/baseline_person_black_24"
         android:title="Pelayan" />
 
+    <item android:title="Absensi">
+        <menu>
+            <item
+                android:id="@+id/pendaftaran"
+                android:icon="@drawable/baseline_person_add_black_24"
+                android:title="Pendaftaran Absensi" />
+
+            <item
+                android:id="@+id/absensi"
+                android:icon="@drawable/baseline_person_black_24"
+                android:title="Absensi" />
+        </menu>
+    </item>
+
     <item android:title="Lainnya" >
         <menu>
             <item

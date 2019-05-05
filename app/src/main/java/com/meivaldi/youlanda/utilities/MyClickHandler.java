@@ -44,10 +44,6 @@ import com.meivaldi.youlanda.ui.MainActivity;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
-import app.akexorcist.bluetotohspp.library.BluetoothSPP;
-import app.akexorcist.bluetotohspp.library.BluetoothState;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

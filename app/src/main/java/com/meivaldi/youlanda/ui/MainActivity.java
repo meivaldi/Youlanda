@@ -360,6 +360,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             binding.setHandlers(cashHandler);
 
             tutupKasirDialog.show();
+        } else if (id == R.id.pendaftaran) {
+            startActivity(new Intent(getApplicationContext(), PendaftaranAbsensi.class));
         }
 
         DrawerLayout drawer = binding.drawerLayout;

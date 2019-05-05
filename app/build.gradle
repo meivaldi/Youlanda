@@ -25,6 +25,16 @@ android {
     dataBinding {
         enabled true
     }
+
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
+    }
+
+    packagingOptions {
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+    }
+
 }
 
 dependencies {
@@ -48,7 +58,11 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.akexorcist:bluetoothspp:1.0.0'
+    implementation 'org.tensorflow:tensorflow-lite:+'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-ml-vision:19.0.2'
+    implementation 'com.google.firebase:firebase-ml-vision-face-model:17.0.2'
+    implementation 'com.airbnb.android:lottie:1.5.3'
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
     implementation files('btsdk.jar')

@@ -37,4 +37,8 @@ public interface GetDataService {
     @GET("/android/get_order_number.php")
     Call<OrderNumber> getOrderNumber();
 
+    @POST("android/upload_base64.php")
+    @FormUrlEncoded
+    Call<ResponseApi> uploadImage(@Field("image") String image, @Field("name") String name, @Field("nik") String nik);
+
 }

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".ui.PendaftaranAbsensi">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    <ScrollView
+        android:layout_below="@id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/nikET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:hint="Masukkan NIK"/>
+
+            <TextView
+                android:id="@+id/label"
+                android:layout_marginTop="30dp"
+                android:layout_below="@id/nikET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:text="1. Foto tepat didepan kamera"/>
+
+            <RelativeLayout
+                android:id="@+id/box2"
+                android:layout_below="@id/label2"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dotted"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/photo2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/image2"
+                    android:src="@drawable/employee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"/>
+
+                <Button
+                    android:id="@+id/foto2"
+                    android:layout_below="@id/image2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/colorPrimary"
+                    android:text="Ambil foto"
+                    android:textColor="@android:color/white"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/label2"
+                android:layout_marginTop="30dp"
+                android:layout_below="@id/box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:text="2. Foto dengan pose tersenyum"/>
+
+            <RelativeLayout
+                android:id="@+id/box"
+                android:layout_below="@id/label"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dotted"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/image1"
+                    android:src="@drawable/employee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"/>
+
+                <Button
+                    android:id="@+id/foto1"
+                    android:layout_below="@id/image1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/colorPrimary"
+                    android:text="Ambil foto"
+                    android:textColor="@android:color/white"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/label3"
+                android:layout_marginTop="30dp"
+                android:layout_below="@id/box2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:text="3. Foto dengan pose tersenyum (kelihatan gigi)"
+                android:textAlignment="center"/>
+
+            <RelativeLayout
+                android:id="@+id/box3"
+                android:layout_below="@id/label3"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dotted"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/photo3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/image3"
+                    android:src="@drawable/employee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"/>
+
+                <Button
+                    android:id="@+id/foto3"
+                    android:layout_below="@id/image3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/colorPrimary"
+                    android:text="Ambil foto"
+                    android:textColor="@android:color/white"/>
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/proses"
+                android:layout_below="@id/box3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="Proses"
+                android:textColor="@android:color/white"
+                android:background="@color/colorPrimary"/>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
