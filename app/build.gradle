@@ -68,3 +68,5 @@ dependencies {
     implementation files('btsdk.jar')
     implementation files('zixng.jar')
 }
+
+apply plugin: 'com.google.gms.google-services'

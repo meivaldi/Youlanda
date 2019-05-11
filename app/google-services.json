@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "11960128300",
+    "firebase_url": "https://youlanda-3ba54.firebaseio.com",
+    "project_id": "youlanda-3ba54",
+    "storage_bucket": "youlanda-3ba54.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11960128300:android:2d8b0fa79da4cd32",
+        "android_client_info": {
+          "package_name": "com.meivaldi.youlanda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "11960128300-b09ltseons003dgecsdbg5cc79kboced.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApybE80GnbI50I8wke0wMyucXtbC2cTDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "11960128300-b09ltseons003dgecsdbg5cc79kboced.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

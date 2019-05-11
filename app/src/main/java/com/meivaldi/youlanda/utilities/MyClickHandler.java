@@ -29,6 +29,7 @@ import com.meivaldi.youlanda.R;
 import com.meivaldi.youlanda.data.ProductRepository;
 import com.meivaldi.youlanda.data.database.cart.Cart;
 import com.meivaldi.youlanda.data.database.discount.Discount;
+import com.meivaldi.youlanda.data.database.karyawan.Karyawan;
 import com.meivaldi.youlanda.data.database.order.Order;
 import com.meivaldi.youlanda.data.database.product.Product;
 import com.meivaldi.youlanda.data.network.GetDataService;
@@ -102,7 +103,7 @@ public class MyClickHandler {
                     }
                 });
 
-                print(order);
+                //print(order);
                 changeModal(order.getPrice());
 
                 List<Cart> temp = order.getCartList();
@@ -172,7 +173,7 @@ public class MyClickHandler {
         }
     }
 
-    private void print(Order order) {
+    public void print(Order order) {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_bw);
         int nMode = 0;
         int nPaperWidth = 384;
@@ -196,6 +197,12 @@ public class MyClickHandler {
                 SendDataString(order.getTime());
                 SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(48));
                 SendDataByte(Command.GS_V_m_n);
+
+                Command.ESC_Align[2] = 0x11;
+                SendDataByte(Command.ESC_Align);
+                ProductRepository repository = InjectorUtils.provideRepository(context);
+                Karyawan karyawan = repository.getKaryawan();
+                SendDataString(karyawan.getUnit());
 
                 Command.ESC_Align[2] = 0x00;
                 SendDataByte(Command.ESC_Align);

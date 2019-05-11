@@ -88,7 +88,8 @@ public class PendaftaranAbsensi extends AppCompatActivity {
         toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
 
-        toolbar.setTitle("Pendaftaran Absensi");
+        getSupportActionBar().setTitle("Pendaftaran Absensi");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setSubtitleTextColor(Color.WHITE);
@@ -525,10 +526,4 @@ public class PendaftaranAbsensi extends AppCompatActivity {
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        finish();
-    }
 }

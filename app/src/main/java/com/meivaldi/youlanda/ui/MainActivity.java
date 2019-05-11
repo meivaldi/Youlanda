@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
@@ -23,6 +24,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
@@ -312,6 +314,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setMessage("Printer tidak terhubung, hidupkan printer?")
+                .setPositiveButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                })
+                .setNegativeButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).create();
+
+        builder.show();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -362,6 +380,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             tutupKasirDialog.show();
         } else if (id == R.id.pendaftaran) {
             startActivity(new Intent(getApplicationContext(), PendaftaranAbsensi.class));
+        } else if (id == R.id.absensi) {
+            startActivity(new Intent(getApplicationContext(), Absensi.class));
         }
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -788,4 +808,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (mService != null)
             mService.stop();
     }
+
 }

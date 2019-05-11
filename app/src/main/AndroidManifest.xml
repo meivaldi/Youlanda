@@ -5,6 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.front" />
 
     <application
         android:name=".app.AppController"
@@ -14,6 +19,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="face" />
+
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="landscape">
@@ -50,7 +59,22 @@
         <activity
             android:name=".ui.DeviceListActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".ui.PendaftaranAbsensi"></activity>
+        <activity android:name=".ui.PendaftaranAbsensi"
+            android:screenOrientation="landscape"/>
+
+        <activity android:name=".ui.Absensi"
+            android:screenOrientation="landscape"/>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>
